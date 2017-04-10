@@ -20,8 +20,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
@@ -38,6 +46,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -49,12 +58,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private static final String URL = "http://192.168.2.195:1234/parking_allocation/booking/user_control.php";
     SupportMapFragment sMapFragment;
     Marker currLocationMarker;
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -68,6 +79,10 @@ public class MainActivity extends AppCompatActivity
     int ids=0;
     ArrayList<LatLng> markerPoints;
     static LatLng srclocation;
+    static LatLng destination;
+    Button btn1;
+    private RequestQueue requestQueue;
+    private StringRequest request;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +120,7 @@ public class MainActivity extends AppCompatActivity
                 // TODO: Get info about the selected place.
                 //  Log.i(TAG, "Place: " + place.getName());
                 LatLng destlocation = place.getLatLng();
+                destination = destlocation;
                 setLocationMarker(destlocation.latitude,destlocation.longitude,2);
                 String url = getDirectionsUrl(srclocation , destlocation);
 
@@ -119,6 +135,58 @@ public class MainActivity extends AppCompatActivity
             public void onError(Status status) {
                 // TODO: Handle the error.
                 //  Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+
+        requestQueue = Volley.newRequestQueue(this);
+
+
+        btn1=(Button)findViewById(R.id.button3);
+
+        btn1.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick (View v)
+            {
+                request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if(jsonObject.names().get(0).equals("success")){
+                                Toast.makeText(getApplicationContext(),"SUCCESS "+jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
+                               // startActivity(new Intent(getApplicationContext(),L.class));
+                            }else {
+                                Toast.makeText(getApplicationContext(), "Error" +jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        HashMap<String,String> hashMap = new HashMap<String, String>();
+                        hashMap.put("user_lat", String.valueOf(srclocation.latitude));
+                        hashMap.put("user_long",String.valueOf(srclocation.longitude));
+                        hashMap.put("dest_lat",String.valueOf(destination.latitude));
+                        hashMap.put("dest_long", String.valueOf(destination.longitude));
+
+                        return hashMap;
+                    }
+                };
+
+                requestQueue.add(request);
+
+
             }
         });
 
