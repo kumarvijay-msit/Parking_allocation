@@ -72,7 +72,7 @@ public class TrackGps extends Service implements LocationListener {
                 this.canGetLocation = true;
                 // First get location from Network Provider
                 if (checkNetwork) {
-                    Toast.makeText(mContext, "Network", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "Network", Toast.LENGTH_SHORT).show();
 
                     try {
                         locationManager.requestLocationUpdates(
