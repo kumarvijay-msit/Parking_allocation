@@ -27,8 +27,11 @@ public class login extends AppCompatActivity {
     TextView bytes,sup,lin;
     EditText usr,pswd;
     private RequestQueue requestQueue;
-    private static final String URL = "http://192.168.2.195:1234/parking_allocation/user_info/user_login.php";
+    private static final String URL = "http://192.168.43.153:80/parking_allocation/user_info/user_login.php";
     private StringRequest request;
+    public static final String EXTRA_MESSAGE = "MESSAGE";
+    String message = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +60,17 @@ public class login extends AppCompatActivity {
                 request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
+
+
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if(jsonObject.names().get(0).equals("success")){
-                                Toast.makeText(getApplicationContext(),"SUCCESS "+jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                                Toast.makeText(getApplicationContext(),jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
+                                message = jsonObject.getString("user_id");
+                                startActivity(new Intent(getApplicationContext(),MainActivity.class).putExtra(EXTRA_MESSAGE, message));
                             }else {
-                                Toast.makeText(getApplicationContext(), "Error" +jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) {

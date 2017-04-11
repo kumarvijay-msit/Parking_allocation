@@ -28,7 +28,7 @@ public class signup extends AppCompatActivity {
     TextView login,signup;
 
 
-    private static final String URL = "http://192.168.2.195:1234/parking_allocation/user_info/user_signup.php";
+    private static final String URL = "http://192.168.43.153:80/parking_allocation/user_info/user_signup.php";
     private RequestQueue requestQueue;
     private StringRequest request;
 
