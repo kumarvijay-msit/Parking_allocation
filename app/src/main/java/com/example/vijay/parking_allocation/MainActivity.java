@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private static final String URL = "http://192.168.2.195:1234/parking_allocation/booking/user_control.php";
+    private static final String URL = "http://192.168.43.153:80/parking_allocation/booking/user_control.php";
     SupportMapFragment sMapFragment;
     Marker currLocationMarker;
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity
     Button btn1;
     private RequestQueue requestQueue;
     private StringRequest request;
+
+    String message;
     FloatingActionButton fab;
 
     @Override
@@ -104,7 +106,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         sMapFragment.getMapAsync(this);
-
+        //Toast.makeText(getApplicationContext(),s,Toast.LENGTH_SHORT).show();
 
 
         android.support.v4.app.FragmentManager sFm = getSupportFragmentManager();
@@ -152,6 +154,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick (View v)
             {
+                Intent intent = getIntent();
+                message = intent.getStringExtra(login.EXTRA_MESSAGE);
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -159,7 +164,6 @@ public class MainActivity extends AppCompatActivity
                             JSONObject jsonObject = new JSONObject(response);
                             if(jsonObject.names().get(0).equals("success")){
                                 Toast.makeText(getApplicationContext(),jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
-                                // startActivity(new Intent(getApplicationContext(),L.class));
                             }else {
                                 Toast.makeText(getApplicationContext(), jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
                             }
@@ -183,6 +187,8 @@ public class MainActivity extends AppCompatActivity
                         hashMap.put("user_long",String.valueOf(srclocation.longitude));
                         hashMap.put("dest_lat",String.valueOf(destination.latitude));
                         hashMap.put("dest_long", String.valueOf(destination.longitude));
+                        hashMap.put("user_id", message);
+
 
                         return hashMap;
                     }
