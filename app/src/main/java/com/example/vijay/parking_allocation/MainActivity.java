@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity
     Button btn1;
     private RequestQueue requestQueue;
     private StringRequest request;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +113,7 @@ public class MainActivity extends AppCompatActivity
         } else
             sFm.beginTransaction().show(sMapFragment).commit();
 
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+       PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -129,6 +131,7 @@ public class MainActivity extends AppCompatActivity
                 // Start downloading json data from Google Directions API
                 downloadTask.execute(url);
 
+
             }
 
             @Override
@@ -141,9 +144,10 @@ public class MainActivity extends AppCompatActivity
         requestQueue = Volley.newRequestQueue(this);
 
 
-        btn1=(Button)findViewById(R.id.button3);
+        fab=(FloatingActionButton)findViewById(R.id.fab);
 
-        btn1.setOnClickListener(new View.OnClickListener()
+
+        fab.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick (View v)
@@ -155,7 +159,7 @@ public class MainActivity extends AppCompatActivity
                             JSONObject jsonObject = new JSONObject(response);
                             if(jsonObject.names().get(0).equals("success")){
                                 Toast.makeText(getApplicationContext(),jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
-                               // startActivity(new Intent(getApplicationContext(),L.class));
+                                // startActivity(new Intent(getApplicationContext(),L.class));
                             }else {
                                 Toast.makeText(getApplicationContext(), jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
                             }

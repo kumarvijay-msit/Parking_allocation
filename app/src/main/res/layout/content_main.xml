@@ -10,9 +10,11 @@
     tools:showIn="@layout/app_bar_main"
     tools:context="com.example.vijay.parking_allocation.MainActivity"
     android:weightSum="1">
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <fragment
             android:id="@+id/place_autocomplete_fragment"
@@ -22,30 +24,32 @@
             tools:layout="@layout/activity_main" />
     </FrameLayout>
 
+
     <FrameLayout
         android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="368dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            app:backgroundTint="#FFFFFF"
+
+            android:layout_margin="@dimen/fab_margin"
+            />
+
+
+
     </FrameLayout>
 
 
-    <FrameLayout
-        android:id="@+id/buttonFrame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="100dp"
-        tools:layout_editor_absoluteY="100dp">
 
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="408dp"
-            android:layout_height="80dp"
-            android:text="Button" />
-    </FrameLayout>
+
 
 
 </LinearLayout>
