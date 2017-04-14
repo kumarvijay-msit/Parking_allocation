@@ -90,8 +90,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        sMapFragment = SupportMapFragment.newInstance();
+
         super.onCreate(savedInstanceState);
+        sMapFragment = SupportMapFragment.newInstance();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -164,6 +165,7 @@ public class MainActivity extends AppCompatActivity
                             JSONObject jsonObject = new JSONObject(response);
                             if(jsonObject.names().get(0).equals("success")){
                                 Toast.makeText(getApplicationContext(),jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
+
                             }else {
                                 Toast.makeText(getApplicationContext(), jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
                             }
@@ -188,6 +190,7 @@ public class MainActivity extends AppCompatActivity
                         hashMap.put("dest_lat",String.valueOf(destination.latitude));
                         hashMap.put("dest_long", String.valueOf(destination.longitude));
                         hashMap.put("user_id", message);
+                        fab.setEnabled(false);
 
 
                         return hashMap;
@@ -199,6 +202,8 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
+
 
 
 
