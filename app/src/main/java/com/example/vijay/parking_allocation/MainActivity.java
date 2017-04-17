@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final String URL = "https://shayongupta.000webhostapp.com/booking/user_control.php";
     SupportMapFragment sMapFragment;
+    GoogleMap gMap;
     Marker currLocationMarker;
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     GoogleApiClient mGoogleApiClient;
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity
     private GoogleMap mMap;
     private View b_get;
     private TrackGps gps;
-    int ids=0;
+    int ids = 0;
     ArrayList<LatLng> markerPoints;
     static LatLng srclocation;
     static LatLng destination;
@@ -87,12 +88,14 @@ public class MainActivity extends AppCompatActivity
 
     String message;
     FloatingActionButton fab;
-    static boolean  flag = false;
+    static boolean flag = false;
 
 
     double parklat = 0.0;
     double parklong = 0.0;
     LatLng parkloc;
+
+    Marker myMarkersrc = null, myMarkerDest = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,8 +135,11 @@ public class MainActivity extends AppCompatActivity
                 // TODO: Get info about the selected place.
                 //  Log.i(TAG, "Place: " + place.getName());
                 LatLng destlocation = place.getLatLng();
+
                 destination = destlocation;
-                setLocationMarker(destlocation.latitude,destlocation.longitude,2);
+
+
+                setLocationMarker(destlocation.latitude, destlocation.longitude, 2);
 
 
               /* String url = getDirectionsUrl(destloc , destlocation);
@@ -154,14 +160,12 @@ public class MainActivity extends AppCompatActivity
         requestQueue = Volley.newRequestQueue(this);
 
 
-        fab=(FloatingActionButton)findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
 
 
-        fab.setOnClickListener(new View.OnClickListener()
-        {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick (View v)
-            {
+            public void onClick(View v) {
                /* Intent intent = getIntent();
                 message = intent.getStringExtra(login.EXTRA_MESSAGE);
                 message="Vijay";
@@ -192,21 +196,20 @@ public class MainActivity extends AppCompatActivity
 */
 
 
-
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            if(jsonObject.names().get(0).equals("success")){
-                                Toast.makeText(getApplicationContext(),jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
-                                parklat =  Double.parseDouble(jsonObject.getString("lat"));
+                            if (jsonObject.names().get(0).equals("success")) {
+                                Toast.makeText(getApplicationContext(), jsonObject.getString("success"), Toast.LENGTH_SHORT).show();
+                                parklat = Double.parseDouble(jsonObject.getString("lat"));
                                 parklong = Double.parseDouble(jsonObject.getString("long"));
-                                setLocationMarker(parklat,parklong,3);
-                                parkloc = new LatLng(parklat,parklong);
+                                setLocationMarker(parklat, parklong, 3);
+                                parkloc = new LatLng(parklat, parklong);
 
-                                String url = getDirectionsUrl(destination , parkloc);
+                                String url = getDirectionsUrl(destination, parkloc);
 
                                 DownloadTask downloadTask = new DownloadTask();
 
@@ -217,7 +220,7 @@ public class MainActivity extends AppCompatActivity
                                 destlong = Double.parseDouble(jsonObject.getString("long"));
                                 setLocationMarker(destlat,destlong,3);
                                 destloc = new LatLng(destlat,destlong);*/
-                                String urlnew = getDirectionsUrl(srclocation , parkloc);
+                                String urlnew = getDirectionsUrl(srclocation, parkloc);
                                 DownloadTask downloadTask1 = new DownloadTask();
                                 downloadTask1.execute(urlnew);
                                /* setLocationMarker(22.5145,88.4033,3);
@@ -227,7 +230,7 @@ public class MainActivity extends AppCompatActivity
                                 // Start downloading json data from Google Directions API
                                 downloadTask.execute(url);*/
 
-                            }else {
+                            } else {
                                 Toast.makeText(getApplicationContext(), jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
                             }
 
@@ -242,21 +245,16 @@ public class MainActivity extends AppCompatActivity
                     public void onErrorResponse(VolleyError error) {
 
                     }
-                }){
+                }) {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
-                        HashMap<String,String> hashMap = new HashMap<String, String>();
+                        HashMap<String, String> hashMap = new HashMap<String, String>();
                         hashMap.put("user_lat", String.valueOf(srclocation.latitude));
-                        hashMap.put("user_long",String.valueOf(srclocation.longitude));
-                        hashMap.put("dest_lat",String.valueOf(destination.latitude));
+                        hashMap.put("user_long", String.valueOf(srclocation.longitude));
+                        hashMap.put("dest_lat", String.valueOf(destination.latitude));
                         hashMap.put("dest_long", String.valueOf(destination.longitude));
                         hashMap.put("user_id", message);
                         //fab.setEnabled(false);
-
-
-
-
-
 
 
                         return hashMap;
@@ -270,15 +268,7 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-
-
-
-
     }
-
-
-
-
 
 
     @Override
@@ -390,8 +380,8 @@ public class MainActivity extends AppCompatActivity
 
             longitude = gps.getLongitude();
             latitude = gps.getLatitude();
-            setLocationMarker(latitude,longitude,1);
-            srclocation = new LatLng(latitude,longitude);
+            setLocationMarker(latitude, longitude, 1);
+            srclocation = new LatLng(latitude, longitude);
 
             //final LatLng current = new LatLng(latitude, longitude);
             //Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
@@ -441,16 +431,34 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void setLocationMarker(Double latitude,Double longitude,int ids)
-    {
+    public void setLocationMarker(Double latitude, Double longitude, int ids) {
+        byte cnt1 = 0, cnt2 = 1;
         final LatLng current = new LatLng(latitude, longitude);
         //Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
-        if(ids == 1)   // for source
-            mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-        else if (ids == 2)// for destination
-            mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        else
-        if(ids == 3)
+        if (ids == 1) {
+            // for source
+
+            if (myMarkersrc != null) {
+                myMarkersrc.remove();
+                myMarkersrc = null;
+            }
+            myMarkersrc = mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        }
+
+
+        if (ids == 2) {
+            // for destination
+
+            if (myMarkerDest != null) {
+                myMarkerDest.remove();
+                myMarkerDest = null;
+            }
+
+
+            myMarkerDest = mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+
+        }
+        if (ids == 3)
             mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 
 
