@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity
     Marker currLocationMarker;
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     GoogleApiClient mGoogleApiClient;
-     double longitude;
-     double latitude;
+    double longitude;
+    double latitude;
     private boolean mPermissionDenied = false;
     private GoogleMap mMap;
     private View b_get;
@@ -122,9 +122,9 @@ public class MainActivity extends AppCompatActivity
         } else
             sFm.beginTransaction().show(sMapFragment).commit();
 
-       PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-
+        autocompleteFragment.getView().setBackgroundColor(Color.WHITE);
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
@@ -136,9 +136,7 @@ public class MainActivity extends AppCompatActivity
 
 
               /* String url = getDirectionsUrl(destloc , destlocation);
-
                 DownloadTask downloadTask = new DownloadTask();
-
                 // Start downloading json data from Google Directions API
                 downloadTask.execute(url);*/
 
@@ -209,12 +207,8 @@ public class MainActivity extends AppCompatActivity
 
                                /* setLocationMarker(22.5145,88.4033,3);
                                 destloc = new LatLng(22.5145,88.4033);
-
-
                                 String url = getDirectionsUrl(srclocation , destloc);
-
                                 DownloadTask downloadTask = new DownloadTask();
-
                                 // Start downloading json data from Google Directions API
                                 downloadTask.execute(url);*/
 
@@ -333,6 +327,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
+
         mMap.setOnMyLocationButtonClickListener(this);
         enableMyLocation();
 
@@ -395,7 +390,7 @@ public class MainActivity extends AppCompatActivity
             gps.showSettingsAlert();
         }
 
-        return true;
+        return false;
     }
 
     @Override
@@ -436,12 +431,12 @@ public class MainActivity extends AppCompatActivity
         final LatLng current = new LatLng(latitude, longitude);
         //Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
         if(ids == 1)   // for source
-        mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
         else if (ids == 2)// for destination
             mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         else
-            if(ids == 3)
-                mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        if(ids == 3)
+            mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(current));
@@ -509,7 +504,7 @@ public class MainActivity extends AppCompatActivity
         return data;
     }
 
-   // /Fetches data from url passed
+    // /Fetches data from url passed
     private class DownloadTask extends AsyncTask<String, Void, String> {
 
         // Downloading data in non-ui thread
