@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity
 
                 requestQueue.add(request);
 
-
+                fab.setEnabled(false);
             }
         });
 
