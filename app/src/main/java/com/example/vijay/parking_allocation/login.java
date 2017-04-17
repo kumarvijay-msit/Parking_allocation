@@ -57,6 +57,8 @@ public class login extends AppCompatActivity {
             public void onClick(View v)
             {
 
+               // startActivity(new Intent(getApplicationContext(),MainActivity.class));
+
                 request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -67,8 +69,8 @@ public class login extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             if(jsonObject.names().get(0).equals("success")){
                                 Toast.makeText(getApplicationContext(),jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
-                                message = jsonObject.getString("user_id");
-                                startActivity(new Intent(getApplicationContext(),MainActivity.class).putExtra(EXTRA_MESSAGE, message));
+                               // message = jsonObject.getString("user_id");
+                               // startActivity(new Intent(getApplicationContext(),MainActivity.class).putExtra(EXTRA_MESSAGE, message));
                             }else {
                                 Toast.makeText(getApplicationContext(),jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
                             }

@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity
 
     String message;
     FloatingActionButton fab;
+    static boolean  flag = false;
 
 
     double destlat = 0.0;
@@ -132,12 +133,14 @@ public class MainActivity extends AppCompatActivity
                 LatLng destlocation = place.getLatLng();
                 destination = destlocation;
                 setLocationMarker(destlocation.latitude,destlocation.longitude,2);
-                String url = getDirectionsUrl(srclocation , destlocation);
+
+
+              /* String url = getDirectionsUrl(destloc , destlocation);
 
                 DownloadTask downloadTask = new DownloadTask();
 
                 // Start downloading json data from Google Directions API
-                downloadTask.execute(url);
+                downloadTask.execute(url);*/
 
 
             }
@@ -160,8 +163,36 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick (View v)
             {
-                Intent intent = getIntent();
+               /* Intent intent = getIntent();
                 message = intent.getStringExtra(login.EXTRA_MESSAGE);
+                message="Vijay";
+                TextView t = (TextView) findViewById(R.id.user_name);
+                t.setText(message);*/
+
+
+                //cut here
+
+
+                setLocationMarker(22.5145,88.4033,3);
+                destloc = new LatLng(22.5145,88.4033);
+
+
+                String url = getDirectionsUrl(srclocation , destloc);
+
+                DownloadTask downloadTask = new DownloadTask();
+
+                // Start downloading json data from Google Directions API
+                downloadTask.execute(url);
+                //upto here
+                String urlnew = getDirectionsUrl(destloc , destination);
+
+                DownloadTask downloadTasknew = new DownloadTask();
+
+                // Start downloading json data from Google Directions API
+                downloadTasknew.execute(urlnew);
+
+
+
 
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -171,17 +202,21 @@ public class MainActivity extends AppCompatActivity
                             JSONObject jsonObject = new JSONObject(response);
                             if(jsonObject.names().get(0).equals("success")){
                                 Toast.makeText(getApplicationContext(),jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
-                                destlat =  Double.parseDouble(jsonObject.getString("lat"));
+                               /* destlat =  Double.parseDouble(jsonObject.getString("lat"));
                                 destlong = Double.parseDouble(jsonObject.getString("long"));
                                 setLocationMarker(destlat,destlong,3);
-                                destloc = new LatLng(destlat,destlong);
+                                destloc = new LatLng(destlat,destlong);*/
 
-                                String url = getDirectionsUrl(destination , destloc);
+                               /* setLocationMarker(22.5145,88.4033,3);
+                                destloc = new LatLng(22.5145,88.4033);
+
+
+                                String url = getDirectionsUrl(srclocation , destloc);
 
                                 DownloadTask downloadTask = new DownloadTask();
 
                                 // Start downloading json data from Google Directions API
-                                downloadTask.execute(url);
+                                downloadTask.execute(url);*/
 
                             }else {
                                 Toast.makeText(getApplicationContext(), jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
@@ -360,7 +395,7 @@ public class MainActivity extends AppCompatActivity
             gps.showSettingsAlert();
         }
 
-        return false;
+        return true;
     }
 
     @Override
