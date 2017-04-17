@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 10, 2017 at 04:44 PM
+-- Generation Time: Apr 17, 2017 at 10:51 AM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -193,7 +193,11 @@ INSERT INTO `bookinginfo` (`bookid`, `uid`, `booking_time`, `booking_start_time`
 (145, 0, '', '', '', '', '', '', '22.544750214971998', '88.37059959769249', '22.5133251', '88.4032273'),
 (146, 0, '', '', '', '', '', '', '22.544750214971998', '88.37059959769249', '22.5133251', '88.4032273'),
 (147, 0, '', '', '', '', '', '', '22.544750214971998', '88.37059959769249', '22.5133251', '88.4032273'),
-(148, 0, '', '', '', '', '', '', '22.544750214971998', '88.37059959769249', '22.5135487', '88.40190969999999');
+(148, 0, '', '', '', '', '', '', '22.544750214971998', '88.37059959769249', '22.5135487', '88.40190969999999'),
+(149, 0, '', '', '', '', '', '', '22.501727', '88.3462458', '22.5170076', '88.365819'),
+(150, 0, '', '', '', '', '', '', '22.501727', '88.3462458', '22.5170076', '88.365819'),
+(151, 0, '', '', '', '', '', '', '22.5006129', '88.3465494', '22.5151602', '88.3931432'),
+(152, 0, '', '', '', '', '', '', '22.5006129', '88.3465494', '22.5151602', '88.3931432');
 
 -- --------------------------------------------------------
 
@@ -215,11 +219,11 @@ CREATE TABLE `parking_slots` (
 --
 
 INSERT INTO `parking_slots` (`id`, `p_lat`, `p_long`, `p_id`, `p_name`, `no_of_slots`) VALUES
-(1, '22.5133251', '88.4032273', 'ChIJGxYlTP5zAjoRoay7KisCubM', 'Ruby General Hospital', 0),
-(2, '22.5413065', '88.3961892', 'ChIJBZ8ab592AjoRu9R1cOXl1KM', 'Science City Bus Stop', 0),
-(5, '22.5170076', '88.365819', 'ChIJGyc4wdR2AjoRvtXtzeOKOsg', 'Gariahat', 0),
-(8, '22.518128', '88.3865642', 'Ej5SYXNoIEJlaGFyaSBBdmUsIFRhbCBCYWdhbiwgS2FzYmEsIEtvbGthdGEsIFdlc3QgQmVuZ2FsLCBJbmRpYQ', 'Tal Bagan, Rashbehari Avenue', 0),
-(9, '22.5378858', '88.368246', 'ChIJPX-il912AjoRD1_zod3Xgv0', 'Park Circus', 0);
+(1, '22.5133251', '88.4032273', 'ChIJGxYlTP5zAjoRoay7KisCubM', 'Ruby General Hospital', 150),
+(2, '22.5413065', '88.3961892', 'ChIJBZ8ab592AjoRu9R1cOXl1KM', 'Science City Bus Stop', 150),
+(5, '22.5170076', '88.365819', 'ChIJGyc4wdR2AjoRvtXtzeOKOsg', 'Gariahat', 148),
+(8, '22.518128', '88.3865642', 'Ej5SYXNoIEJlaGFyaSBBdmUsIFRhbCBCYWdhbiwgS2FzYmEsIEtvbGthdGEsIFdlc3QgQmVuZ2FsLCBJbmRpYQ', 'Tal Bagan, Rashbehari Avenue', 148),
+(9, '22.5378858', '88.368246', 'ChIJPX-il912AjoRD1_zod3Xgv0', 'Park Circus', 150);
 
 -- --------------------------------------------------------
 
@@ -242,7 +246,8 @@ CREATE TABLE `usertable` (
 INSERT INTO `usertable` (`uid`, `username`, `password`, `mob_no`, `email`) VALUES
 (1, 'tanmoy', '21232f297a57a5a743894a0e4a801fc3', '8962', 'tan@gmail.com'),
 (2, '123456', '81dc9bdb52d04dc20036dbd8313ed055', '1234567890', 'iamstk14@gmail.com'),
-(3, 'xyzz', '81dc9bdb52d04dc20036dbd8313ed055', '1234567890', 'xyz@gmail.com');
+(3, 'xyzz', '81dc9bdb52d04dc20036dbd8313ed055', '1234567890', 'xyz@gmail.com'),
+(4, 'tanmoy Mukherjee', '63a9f0ea7bb98050796b649e85481845', '8546948449', 'tanmoy');
 
 --
 -- Indexes for dumped tables
@@ -274,7 +279,7 @@ ALTER TABLE `usertable`
 -- AUTO_INCREMENT for table `bookinginfo`
 --
 ALTER TABLE `bookinginfo`
-  MODIFY `bookid` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
+  MODIFY `bookid` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=153;
 --
 -- AUTO_INCREMENT for table `parking_slots`
 --
@@ -284,7 +289,7 @@ ALTER TABLE `parking_slots`
 -- AUTO_INCREMENT for table `usertable`
 --
 ALTER TABLE `usertable`
-  MODIFY `uid` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `uid` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
