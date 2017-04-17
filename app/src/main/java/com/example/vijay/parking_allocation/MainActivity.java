@@ -88,6 +88,11 @@ public class MainActivity extends AppCompatActivity
     String message;
     FloatingActionButton fab;
 
+
+    double dummylat = 22.5145;
+    double dummylong = 88.4033;
+    LatLng dummyloc;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -157,6 +162,18 @@ public class MainActivity extends AppCompatActivity
             {
                 Intent intent = getIntent();
                 message = intent.getStringExtra(login.EXTRA_MESSAGE);
+
+                setLocationMarker(dummylat,dummylong,3);
+
+                dummyloc = new LatLng(dummylat,dummylong);
+
+                String url = getDirectionsUrl(destination , dummyloc);
+
+                DownloadTask downloadTask = new DownloadTask();
+
+                // Start downloading json data from Google Directions API
+                downloadTask.execute(url);
+
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                     @Override
@@ -165,6 +182,17 @@ public class MainActivity extends AppCompatActivity
                             JSONObject jsonObject = new JSONObject(response);
                             if(jsonObject.names().get(0).equals("success")){
                                 Toast.makeText(getApplicationContext(),jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
+
+                               /*
+                                setLocationMarker(dummylat,dummylong,3);
+                                dummyloc = new LatLng(dummylat,dummylong);
+
+                                String url = getDirectionsUrl(destination , dummyloc);
+
+                                DownloadTask downloadTask = new DownloadTask();
+
+                                // Start downloading json data from Google Directions API
+                                downloadTask.execute(url);*/
 
                             }else {
                                 Toast.makeText(getApplicationContext(), jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
@@ -191,6 +219,11 @@ public class MainActivity extends AppCompatActivity
                         hashMap.put("dest_long", String.valueOf(destination.longitude));
                         hashMap.put("user_id", message);
                         fab.setEnabled(false);
+
+
+
+
+
 
 
                         return hashMap;
@@ -383,8 +416,8 @@ public class MainActivity extends AppCompatActivity
         else if (ids == 2)// for destination
             mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         else
-            //for server selected parking lot
-            mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+            if(ids == 3)
+                mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(current));
