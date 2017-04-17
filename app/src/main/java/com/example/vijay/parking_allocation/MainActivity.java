@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity
             {
                 Intent intent = getIntent();
                 message = intent.getStringExtra(login.EXTRA_MESSAGE);
-
+                //cut from here
                 setLocationMarker(dummylat,dummylong,3);
 
                 dummyloc = new LatLng(dummylat,dummylong);
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity
 
                 // Start downloading json data from Google Directions API
                 downloadTask.execute(url);
-
+                //upto here
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                     @Override
