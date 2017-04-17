@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private static final String URL = "http://192.168.2.195:1234/parking_allocation/booking/user_control.php";
+    private static final String URL = "https://shayongupta.000webhostapp.com/booking/user_control.php";
     SupportMapFragment sMapFragment;
     Marker currLocationMarker;
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -90,13 +90,14 @@ public class MainActivity extends AppCompatActivity
     static boolean  flag = false;
 
 
-    double destlat = 0.0;
-    double destlong = 0.0;
-    LatLng destloc;
+    double parklat = 0.0;
+    double parklong = 0.0;
+    LatLng parkloc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        Intent intent = getIntent();
+        message = intent.getStringExtra(login.EXTRA_MESSAGE);
         super.onCreate(savedInstanceState);
         sMapFragment = SupportMapFragment.newInstance();
         setContentView(R.layout.activity_main);
@@ -171,7 +172,7 @@ public class MainActivity extends AppCompatActivity
                 //cut here
 
 
-                setLocationMarker(22.5145,88.4033,3);
+                /*setLocationMarker(22.5145,88.4033,3);
                 destloc = new LatLng(22.5145,88.4033);
 
 
@@ -188,7 +189,7 @@ public class MainActivity extends AppCompatActivity
 
                 // Start downloading json data from Google Directions API
                 downloadTasknew.execute(urlnew);
-
+*/
 
 
 
@@ -200,11 +201,25 @@ public class MainActivity extends AppCompatActivity
                             JSONObject jsonObject = new JSONObject(response);
                             if(jsonObject.names().get(0).equals("success")){
                                 Toast.makeText(getApplicationContext(),jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
-                               /* destlat =  Double.parseDouble(jsonObject.getString("lat"));
+                                parklat =  Double.parseDouble(jsonObject.getString("lat"));
+                                parklong = Double.parseDouble(jsonObject.getString("long"));
+                                setLocationMarker(parklat,parklong,3);
+                                parkloc = new LatLng(parklat,parklong);
+
+                                String url = getDirectionsUrl(destination , parkloc);
+
+                                DownloadTask downloadTask = new DownloadTask();
+
+                                // Start downloading json data from Google Directions API
+                                downloadTask.execute(url);
+
+                                /* destlat =  Double.parseDouble(jsonObject.getString("lat"));
                                 destlong = Double.parseDouble(jsonObject.getString("long"));
                                 setLocationMarker(destlat,destlong,3);
                                 destloc = new LatLng(destlat,destlong);*/
-
+                                String urlnew = getDirectionsUrl(srclocation , parkloc);
+                                DownloadTask downloadTask1 = new DownloadTask();
+                                downloadTask1.execute(urlnew);
                                /* setLocationMarker(22.5145,88.4033,3);
                                 destloc = new LatLng(22.5145,88.4033);
                                 String url = getDirectionsUrl(srclocation , destloc);

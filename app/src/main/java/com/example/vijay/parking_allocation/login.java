@@ -27,7 +27,7 @@ public class login extends AppCompatActivity {
     TextView bytes,sup,lin;
     EditText usr,pswd;
     private RequestQueue requestQueue;
-    private static final String URL = "http://192.168.2.195:1234/parking_allocation/user_info/user_login.php";
+    private static final String URL = "https://shayongupta.000webhostapp.com/user_info/user_login.php";
     private StringRequest request;
     public static final String EXTRA_MESSAGE = "MESSAGE";
     String message = "";
@@ -69,8 +69,8 @@ public class login extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             if(jsonObject.names().get(0).equals("success")){
                                 Toast.makeText(getApplicationContext(),jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
-                               // message = jsonObject.getString("user_id");
-                               // startActivity(new Intent(getApplicationContext(),MainActivity.class).putExtra(EXTRA_MESSAGE, message));
+                                message = jsonObject.getString("user_id");
+                                startActivity(new Intent(getApplicationContext(),MainActivity.class).putExtra(EXTRA_MESSAGE, message));
                             }else {
                                 Toast.makeText(getApplicationContext(),jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
                             }
