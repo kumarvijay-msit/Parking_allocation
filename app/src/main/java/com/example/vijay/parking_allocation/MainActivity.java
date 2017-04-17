@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -20,8 +21,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
@@ -38,6 +47,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -49,18 +59,20 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private static final String URL = "https://shayongupta.000webhostapp.com/booking/user_control.php";
     SupportMapFragment sMapFragment;
     Marker currLocationMarker;
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     GoogleApiClient mGoogleApiClient;
-     double longitude;
-     double latitude;
+    double longitude;
+    double latitude;
     private boolean mPermissionDenied = false;
     private GoogleMap mMap;
     private View b_get;
@@ -68,11 +80,26 @@ public class MainActivity extends AppCompatActivity
     int ids=0;
     ArrayList<LatLng> markerPoints;
     static LatLng srclocation;
+    static LatLng destination;
+    Button btn1;
+    private RequestQueue requestQueue;
+    private StringRequest request;
+
+    String message;
+    FloatingActionButton fab;
+    static boolean  flag = false;
+
+
+    double parklat = 0.0;
+    double parklong = 0.0;
+    LatLng parkloc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        sMapFragment = SupportMapFragment.newInstance();
+        Intent intent = getIntent();
+        message = intent.getStringExtra(login.EXTRA_MESSAGE);
         super.onCreate(savedInstanceState);
+        sMapFragment = SupportMapFragment.newInstance();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -87,7 +114,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         sMapFragment.getMapAsync(this);
-
+        //Toast.makeText(getApplicationContext(),s,Toast.LENGTH_SHORT).show();
 
 
         android.support.v4.app.FragmentManager sFm = getSupportFragmentManager();
@@ -98,20 +125,22 @@ public class MainActivity extends AppCompatActivity
 
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-
+        autocompleteFragment.getView().setBackgroundColor(Color.WHITE);
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
                 //  Log.i(TAG, "Place: " + place.getName());
                 LatLng destlocation = place.getLatLng();
+                destination = destlocation;
                 setLocationMarker(destlocation.latitude,destlocation.longitude,2);
-                String url = getDirectionsUrl(srclocation , destlocation);
 
+
+              /* String url = getDirectionsUrl(destloc , destlocation);
                 DownloadTask downloadTask = new DownloadTask();
-
                 // Start downloading json data from Google Directions API
-                downloadTask.execute(url);
+                downloadTask.execute(url);*/
+
 
             }
 
@@ -121,6 +150,126 @@ public class MainActivity extends AppCompatActivity
                 //  Log.i(TAG, "An error occurred: " + status);
             }
         });
+
+        requestQueue = Volley.newRequestQueue(this);
+
+
+        fab=(FloatingActionButton)findViewById(R.id.fab);
+
+
+        fab.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick (View v)
+            {
+               /* Intent intent = getIntent();
+                message = intent.getStringExtra(login.EXTRA_MESSAGE);
+                message="Vijay";
+                TextView t = (TextView) findViewById(R.id.user_name);
+                t.setText(message);*/
+
+
+                //cut here
+
+
+                /*setLocationMarker(22.5145,88.4033,3);
+                destloc = new LatLng(22.5145,88.4033);
+
+
+                String url = getDirectionsUrl(srclocation , destloc);
+
+                DownloadTask downloadTask = new DownloadTask();
+
+                // Start downloading json data from Google Directions API
+                downloadTask.execute(url);
+                //upto here
+                String urlnew = getDirectionsUrl(destloc , destination);
+
+                DownloadTask downloadTasknew = new DownloadTask();
+
+                // Start downloading json data from Google Directions API
+                downloadTasknew.execute(urlnew);
+*/
+
+
+
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if(jsonObject.names().get(0).equals("success")){
+                                Toast.makeText(getApplicationContext(),jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
+                                parklat =  Double.parseDouble(jsonObject.getString("lat"));
+                                parklong = Double.parseDouble(jsonObject.getString("long"));
+                                setLocationMarker(parklat,parklong,3);
+                                parkloc = new LatLng(parklat,parklong);
+
+                                String url = getDirectionsUrl(destination , parkloc);
+
+                                DownloadTask downloadTask = new DownloadTask();
+
+                                // Start downloading json data from Google Directions API
+                                downloadTask.execute(url);
+
+                                /* destlat =  Double.parseDouble(jsonObject.getString("lat"));
+                                destlong = Double.parseDouble(jsonObject.getString("long"));
+                                setLocationMarker(destlat,destlong,3);
+                                destloc = new LatLng(destlat,destlong);*/
+                                String urlnew = getDirectionsUrl(srclocation , parkloc);
+                                DownloadTask downloadTask1 = new DownloadTask();
+                                downloadTask1.execute(urlnew);
+                               /* setLocationMarker(22.5145,88.4033,3);
+                                destloc = new LatLng(22.5145,88.4033);
+                                String url = getDirectionsUrl(srclocation , destloc);
+                                DownloadTask downloadTask = new DownloadTask();
+                                // Start downloading json data from Google Directions API
+                                downloadTask.execute(url);*/
+
+                            }else {
+                                Toast.makeText(getApplicationContext(), jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        HashMap<String,String> hashMap = new HashMap<String, String>();
+                        hashMap.put("user_lat", String.valueOf(srclocation.latitude));
+                        hashMap.put("user_long",String.valueOf(srclocation.longitude));
+                        hashMap.put("dest_lat",String.valueOf(destination.latitude));
+                        hashMap.put("dest_long", String.valueOf(destination.longitude));
+                        hashMap.put("user_id", message);
+                        //fab.setEnabled(false);
+
+
+
+
+
+
+
+                        return hashMap;
+                    }
+                };
+
+                requestQueue.add(request);
+
+
+            }
+        });
+
+
 
 
 
@@ -193,10 +342,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
+
         mMap.setOnMyLocationButtonClickListener(this);
         enableMyLocation();
 
-
+//
     }
 
     private void enableMyLocation() {
@@ -296,11 +446,11 @@ public class MainActivity extends AppCompatActivity
         final LatLng current = new LatLng(latitude, longitude);
         //Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
         if(ids == 1)   // for source
-        mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
         else if (ids == 2)// for destination
             mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         else
-            //for server selected parking lot
+        if(ids == 3)
             mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 
 
@@ -369,7 +519,7 @@ public class MainActivity extends AppCompatActivity
         return data;
     }
 
-   // /Fetches data from url passed
+    // /Fetches data from url passed
     private class DownloadTask extends AsyncTask<String, Void, String> {
 
         // Downloading data in non-ui thread
