@@ -331,7 +331,7 @@ public class MainActivity extends AppCompatActivity
         mMap.setOnMyLocationButtonClickListener(this);
         enableMyLocation();
 
-
+//
     }
 
     private void enableMyLocation() {
