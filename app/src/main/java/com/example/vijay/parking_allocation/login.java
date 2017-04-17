@@ -27,7 +27,7 @@ public class login extends AppCompatActivity {
     TextView bytes,sup,lin;
     EditText usr,pswd;
     private RequestQueue requestQueue;
-    private static final String URL = "http://192.168.43.153:80/parking_allocation/user_info/user_login.php";
+    private static final String URL = "http://192.168.2.195:1234/parking_allocation/user_info/user_login.php";
     private StringRequest request;
     public static final String EXTRA_MESSAGE = "MESSAGE";
     String message = "";
