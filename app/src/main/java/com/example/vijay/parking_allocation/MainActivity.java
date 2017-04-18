@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -97,21 +98,35 @@ public class MainActivity extends AppCompatActivity
 
     Marker myMarkersrc = null, myMarkerDest = null;
     DrawerLayout drawer;
+    SessionHandel session;
+    String name;
+    TextView t;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         message = intent.getStringExtra(login.EXTRA_MESSAGE);
-        super.onCreate(savedInstanceState);
         sMapFragment = SupportMapFragment.newInstance();
         setContentView(R.layout.activity_main);
         ImageView imgv = (ImageView) findViewById(R.id.imageView1);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+        session = new SessionHandel(getApplicationContext());
+        name = session.getusername();
+
+        //t = (TextView)findViewById(R.id.user_name);
+
+
+
+
         imgv.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-
+                t = (TextView)findViewById(R.id.user_name);
+                if(name.isEmpty())
+                    name="Welcome Guest";
+                t.setText(name);
                 drawer.openDrawer(Gravity.START);
             }
         });
@@ -169,37 +184,11 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* Intent intent = getIntent();
-                message = intent.getStringExtra(login.EXTRA_MESSAGE);
-                message="Vijay";
-                TextView t = (TextView) findViewById(R.id.user_name);
-                t.setText(message);*/
 
 
-                //cut here
 
+             //   Toast.makeText(getApplicationContext(),"gugugaga"+ name, Toast.LENGTH_SHORT).show();
 
-                /*setLocationMarker(22.5145,88.4033,3);
-                destloc = new LatLng(22.5145,88.4033);
-
-
-                String url = getDirectionsUrl(srclocation , destloc);
-
-                DownloadTask downloadTask = new DownloadTask();
-
-                // Start downloading json data from Google Directions API
-                downloadTask.execute(url);
-                //upto here
-                String urlnew = getDirectionsUrl(destloc , destination);
-
-                DownloadTask downloadTasknew = new DownloadTask();
-
-                // Start downloading json data from Google Directions API
-                downloadTasknew.execute(urlnew);
-*/
-
-
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -319,7 +308,12 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_Payments) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_Logout) {
+
+
+            session.destroySession();
+            Intent i = new Intent(getApplicationContext(), login.class);
+            startActivity(i);
 
         } else if (id == R.id.nav_share) {
 

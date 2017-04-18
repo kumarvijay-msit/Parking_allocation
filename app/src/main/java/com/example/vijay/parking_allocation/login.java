@@ -31,6 +31,7 @@ public class login extends AppCompatActivity {
     private StringRequest request;
     public static final String EXTRA_MESSAGE = "MESSAGE";
     String message = "";
+    private SessionHandel session;//global variable
 
 
     @Override
@@ -51,33 +52,38 @@ public class login extends AppCompatActivity {
         usr.setTypeface(custom_font);
         requestQueue = Volley.newRequestQueue(this);
 
+        session = new SessionHandel(getApplicationContext());
+
+
         lin.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-
-               // startActivity(new Intent(getApplicationContext(),MainActivity.class));
-
                 request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-
 
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if(jsonObject.names().get(0).equals("success")){
                                 Toast.makeText(getApplicationContext(),jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
                                 message = jsonObject.getString("user_id");
+
+                                session.setusername(message);
+                               // Toast.makeText(getApplicationContext(),session.getusername(), Toast.LENGTH_SHORT).show();
+
                                 startActivity(new Intent(getApplicationContext(),MainActivity.class).putExtra(EXTRA_MESSAGE, message));
-                            }else {
+
+                            }
+                            else {
                                 Toast.makeText(getApplicationContext(),jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
 
 
                     }
