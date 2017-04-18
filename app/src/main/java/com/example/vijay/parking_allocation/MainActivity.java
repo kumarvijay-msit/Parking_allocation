@@ -101,12 +101,13 @@ public class MainActivity extends AppCompatActivity
     SessionHandel session;
     String name;
     TextView t;
+    ImageView imgMyLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        message = intent.getStringExtra(login.EXTRA_MESSAGE);
+        message = intent.getStringExtra(Login.EXTRA_MESSAGE);
         sMapFragment = SupportMapFragment.newInstance();
         setContentView(R.layout.activity_main);
         ImageView imgv = (ImageView) findViewById(R.id.imageView1);
@@ -135,7 +136,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         sMapFragment.getMapAsync(this);
-        //Toast.makeText(getApplicationContext(),s,Toast.LENGTH_SHORT).show();
 
 
         android.support.v4.app.FragmentManager sFm = getSupportFragmentManager();
@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_Login) {
-            Intent it = new Intent(MainActivity.this, login.class);
+            Intent it = new Intent(MainActivity.this, Login.class);
             startActivity(it);
         } else if (id == R.id.nav_Rate) {
 
@@ -312,7 +312,7 @@ public class MainActivity extends AppCompatActivity
 
 
             session.destroySession();
-            Intent i = new Intent(getApplicationContext(), login.class);
+            Intent i = new Intent(getApplicationContext(), Login.class);
             startActivity(i);
 
         } else if (id == R.id.nav_share) {
@@ -329,9 +329,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
+        map.getUiSettings().setMyLocationButtonEnabled(false);
+       // mMap.setOnMyLocationButtonClickListener(this);
+        imgMyLocation = (ImageView)findViewById(R.id.imgMyLocation) ;
+        imgMyLocation.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                onMyLocationButtonClick();
+                enableMyLocation();
 
-        mMap.setOnMyLocationButtonClickListener(this);
-        enableMyLocation();
+            }
+        });
+
 
 //
     }
@@ -383,7 +392,7 @@ public class MainActivity extends AppCompatActivity
             //final LatLng current = new LatLng(latitude, longitude);
             //Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
             //mMap.addMarker(new MarkerOptions().position(current));
-            //mMap.moveCamera(CameraUpdateFactory.newLatLng(current));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(srclocation,18.0f));
 
 
             // Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();

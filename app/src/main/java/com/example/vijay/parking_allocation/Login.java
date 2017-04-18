@@ -23,54 +23,67 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class signup extends AppCompatActivity {
-    EditText passwordd,mobphone,mail,usrusr;
-    TextView login,signup;
-
-
-    private static final String URL = "https://shayongupta.000webhostapp.com/user_info/user_signup.php";
+public class Login extends AppCompatActivity {
+    TextView bytes,sup,lin;
+    EditText usr,pswd;
     private RequestQueue requestQueue;
+    private static final String URL = "https://shayongupta.000webhostapp.com/user_info/user_login.php";
     private StringRequest request;
+    public static final String EXTRA_MESSAGE = "MESSAGE";
+    String message = "";
+    private SessionHandel session;//global variable
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        setContentView(R.layout.activity_login);
 
-        usrusr = (EditText) findViewById(R.id.usrusr);
-        passwordd = (EditText)findViewById(R.id.passwrd);
-        mail = (EditText) findViewById(R.id.mail);
-        mobphone = (EditText) findViewById(R.id.mobphone);
-        login = (TextView)findViewById(R.id.logiin);
-        signup = (TextView)findViewById(R.id.sup);
-
+        usr = (EditText) findViewById(R.id.usrusr);
+        pswd = (EditText)findViewById(R.id.passwrd);
+        lin = (TextView)findViewById(R.id.logiin);
+        sup = (TextView)findViewById(R.id.sup);
+        bytes = (TextView)findViewById(R.id.bytes);
         Typeface custom_font = Typeface.createFromAsset(getAssets(),"fonts/Lato-Light.ttf");
-        signup.setTypeface(custom_font);
-        mail.setTypeface(custom_font);
-        mobphone.setTypeface(custom_font);
-        passwordd.setTypeface(custom_font);
-        usrusr.setTypeface(custom_font);
-        login.setTypeface(custom_font);
+        bytes.setTypeface(custom_font);
+        pswd.setTypeface(custom_font);
+        sup.setTypeface(custom_font);
+        lin.setTypeface(custom_font);
+        usr.setTypeface(custom_font);
         requestQueue = Volley.newRequestQueue(this);
 
-        signup.setOnClickListener(new View.OnClickListener() {
+        session = new SessionHandel(getApplicationContext());
+
+
+        lin.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if(jsonObject.names().get(0).equals("success")){
-                                Toast.makeText(getApplicationContext(),"SUCCESS "+jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(getApplicationContext(),login.class));
-                            }else {
-                                Toast.makeText(getApplicationContext(), "Error" +jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
+                                message = jsonObject.getString("user_id");
+
+                                session.setusername(message);
+                               // Toast.makeText(getApplicationContext(),session.getusername(), Toast.LENGTH_SHORT).show();
+
+                                startActivity(new Intent(getApplicationContext(),MainActivity.class).putExtra(EXTRA_MESSAGE, message));
+
+                            }
+                            else {
+                                Toast.makeText(getApplicationContext(),jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
 
 
                     }
@@ -83,10 +96,9 @@ public class signup extends AppCompatActivity {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         HashMap<String,String> hashMap = new HashMap<String, String>();
-                        hashMap.put("email",mail.getText().toString() );
-                        hashMap.put("username",usrusr.getText().toString());
-                        hashMap.put("password",passwordd.getText().toString());
-                        hashMap.put("mob_no",mobphone.getText().toString() );
+                        hashMap.put("email",usr.getText().toString());
+                        hashMap.put("password",pswd.getText().toString());
+
                         return hashMap;
                     }
                 };
@@ -96,10 +108,12 @@ public class signup extends AppCompatActivity {
         });
 
 
-        login.setOnClickListener(new View.OnClickListener() {
+        sup.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-                Intent it = new Intent(signup.this,login.class);
+            public void onClick(View v)
+            {
+                Intent it = new Intent(Login.this, Signup.class);
                 startActivity(it);
             }
         });
