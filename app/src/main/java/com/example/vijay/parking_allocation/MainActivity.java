@@ -330,6 +330,7 @@ public class MainActivity extends AppCompatActivity
     public void onMapReady(GoogleMap map) {
         mMap = map;
         map.getUiSettings().setMyLocationButtonEnabled(false);
+        map.getUiSettings().setMapToolbarEnabled(true);
        // mMap.setOnMyLocationButtonClickListener(this);
         imgMyLocation = (ImageView)findViewById(R.id.imgMyLocation) ;
         imgMyLocation.setOnClickListener(new View.OnClickListener() {
@@ -354,6 +355,7 @@ public class MainActivity extends AppCompatActivity
         } else if (mMap != null) {
             // Access to the location has been granted to the app.
             mMap.setMyLocationEnabled(true);
+
 
         }
     }
