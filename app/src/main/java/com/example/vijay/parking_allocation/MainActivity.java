@@ -410,6 +410,7 @@ public class MainActivity extends AppCompatActivity
             //final LatLng current = new LatLng(latitude, longitude);
             //Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
             //mMap.addMarker(new MarkerOptions().position(current));
+            //
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(srclocation,17.0f));
 
 
