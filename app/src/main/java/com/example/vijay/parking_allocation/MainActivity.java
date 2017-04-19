@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
     SessionHandel session;
     String name;
     TextView t;
-    ImageView imgMyLocation;
+    FloatingActionButton imgMyLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -348,8 +348,8 @@ public class MainActivity extends AppCompatActivity
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setMapToolbarEnabled(true);
        // mMap.setOnMyLocationButtonClickListener(this);
-        imgMyLocation = (ImageView)findViewById(R.id.imgMyLocation) ;
-        imgMyLocation.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab1 = (FloatingActionButton)findViewById(R.id.imgMyLocation) ;
+        fab1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
                 onMyLocationButtonClick();
@@ -410,7 +410,7 @@ public class MainActivity extends AppCompatActivity
             //final LatLng current = new LatLng(latitude, longitude);
             //Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
             //mMap.addMarker(new MarkerOptions().position(current));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(srclocation,18.0f));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(srclocation,17.0f));
 
 
             // Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
