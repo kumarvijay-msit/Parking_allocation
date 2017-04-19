@@ -31,7 +31,7 @@
             android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
-            app:backgroundTint="#000000"
+            app:backgroundTint="#ffffff"
 
             android:layout_margin="@dimen/fab_margin"
             />
@@ -67,8 +67,8 @@
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:clickable="true"
