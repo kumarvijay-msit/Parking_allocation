@@ -376,6 +376,12 @@ public class MainActivity extends AppCompatActivity
             startActivity(i);
 
         } else if (id == R.id.nav_share) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setType("message/rfc822");
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Parking Allocation");
+            intent.putExtra(Intent.EXTRA_TEXT, "link to parking allocation app");
+            Intent mailer = Intent.createChooser(intent, null);
+            startActivity(mailer);
 
         } else if (id == R.id.nav_Support) {
 
