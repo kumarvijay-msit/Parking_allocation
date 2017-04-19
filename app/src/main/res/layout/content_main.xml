@@ -63,11 +63,12 @@
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         tools:layout="@layout/content_main"
-        android:background="@android:color/transparent"/>
+        android:background="@android:color/transparent" />
+
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:clickable="true"

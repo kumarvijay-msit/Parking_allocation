@@ -102,13 +102,14 @@ public class MainActivity extends AppCompatActivity
     Marker myMarkersrc = null, myMarkerDest = null;
     DrawerLayout drawer;
     SessionHandel session;
-    String name;
+    String name = null;
     TextView t;
     FloatingActionButton imgMyLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        name = null;
 
       /*  View decorView = getWindow().getDecorView();
 // Hide the status bar.
@@ -133,6 +134,12 @@ public class MainActivity extends AppCompatActivity
         name = session.getusername();
 
         //t = (TextView)findViewById(R.id.user_name);
+        if(session.getusername().isEmpty())
+        {
+            Intent it = new Intent(MainActivity.this, Login.class);
+            startActivity(it);
+        }
+
 
 
 
@@ -410,7 +417,7 @@ public class MainActivity extends AppCompatActivity
             //final LatLng current = new LatLng(latitude, longitude);
             //Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
             //mMap.addMarker(new MarkerOptions().position(current));
-            //
+
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(srclocation,17.0f));
 
 
