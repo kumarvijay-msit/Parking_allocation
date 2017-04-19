@@ -104,6 +104,7 @@ public class Login extends AppCompatActivity {
                 };
 
                 requestQueue.add(request);
+                lin.setEnabled(false);
             }
         });
 
