@@ -139,7 +139,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="420dp"
+        android:layout_marginTop="500dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         >
@@ -164,5 +164,5 @@
         android:text="Already Have An Account ! Login"
         android:textColor="#fff"
         android:gravity="center"
-        android:layout_marginTop="550dp"/>
+        android:layout_marginTop="540dp"/>
 </RelativeLayout>

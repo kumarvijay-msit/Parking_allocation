@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity
     double longitude;
     double latitude;
     private boolean mPermissionDenied = false;
-    private GoogleMap mMap;
+    private static GoogleMap mMap;
     private View b_get;
     private TrackGps gps;
     int ids = 0;
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity
     double parklong = 0.0;
     LatLng parkloc;
 
-    Marker myMarkersrc = null, myMarkerDest = null;
+    Marker myMarkersrc = null, myMarkerDest = null,myparking = null;
     DrawerLayout drawer;
     SessionHandel session;
     String name = null;
@@ -176,10 +176,13 @@ public class MainActivity extends AppCompatActivity
                 // TODO: Get info about the selected place.
                 //  Log.i(TAG, "Place: " + place.getName());
                 LatLng destlocation = place.getLatLng();
+                fab.setEnabled(true);
+                mMap.clear();
+
 
                 destination = destlocation;
 
-
+                setLocationMarker(srclocation.latitude, srclocation.longitude, 1);
                 setLocationMarker(destlocation.latitude, destlocation.longitude, 2);
 
 
@@ -288,12 +291,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+       /* DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-        }
+        }*/
+
     }
 
     @Override
@@ -352,6 +356,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
+        //map.clear();
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setMapToolbarEnabled(true);
        // mMap.setOnMyLocationButtonClickListener(this);
@@ -490,9 +495,15 @@ public class MainActivity extends AppCompatActivity
             myMarkerDest = mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
         }
-        if (ids == 3)
-            mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        if (ids == 3) {
 
+
+            if (myparking != null) {
+                myparking.remove();
+                myparking = null;
+            }
+            myparking = mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        }
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(current));
     }
