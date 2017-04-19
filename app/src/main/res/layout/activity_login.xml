@@ -21,26 +21,26 @@
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         >
-        <TextView
+        <Button
             android:id="@+id/logiin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Login"
             android:textColor="#fff"
-            android:background="@drawable/border"
+            android:background="@drawable/buttonshape"
             android:padding="15dp"
             android:layout_weight="1"
             android:gravity="center"
             android:layout_marginRight="10dp"
             android:textStyle="bold"
             />
-        <TextView
+        <Button
             android:id="@+id/sup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SignUp"
             android:textColor="#fff"
-            android:background="@drawable/border"
+            android:background="@drawable/buttonshape"
             android:padding="15dp"
             android:layout_weight="1"
             android:gravity="center"

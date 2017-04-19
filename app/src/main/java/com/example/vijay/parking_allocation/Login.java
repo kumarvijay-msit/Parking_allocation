@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +25,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Login extends AppCompatActivity {
-    TextView bytes,sup,lin;
+    TextView bytes;
+    Button sup,lin;
     EditText usr,pswd;
     private RequestQueue requestQueue;
     private static final String URL = "https://shayongupta.000webhostapp.com/user_info/user_login.php";
@@ -41,8 +43,8 @@ public class Login extends AppCompatActivity {
 
         usr = (EditText) findViewById(R.id.usrusr);
         pswd = (EditText)findViewById(R.id.passwrd);
-        lin = (TextView)findViewById(R.id.logiin);
-        sup = (TextView)findViewById(R.id.sup);
+        lin = (Button) findViewById(R.id.logiin);
+        sup = (Button) findViewById(R.id.sup);
         bytes = (TextView)findViewById(R.id.bytes);
         Typeface custom_font = Typeface.createFromAsset(getAssets(),"fonts/Lato-Light.ttf");
         bytes.setTypeface(custom_font);
@@ -122,6 +124,12 @@ public class Login extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
+        if(!session.getusername().isEmpty())
+        {
+            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+
+        }
 
     }
 }

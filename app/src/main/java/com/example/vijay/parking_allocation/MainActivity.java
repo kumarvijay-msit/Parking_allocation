@@ -2,6 +2,8 @@ package com.example.vijay.parking_allocation;
 
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -102,14 +104,14 @@ public class MainActivity extends AppCompatActivity
     Marker myMarkersrc = null, myMarkerDest = null,myparking = null;
     DrawerLayout drawer;
     SessionHandel session;
-    String name = null;
+    String  name = null;
     TextView t;
     FloatingActionButton imgMyLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        name = null;
+
 
       /*  View decorView = getWindow().getDecorView();
 // Hide the status bar.
@@ -138,6 +140,7 @@ public class MainActivity extends AppCompatActivity
         {
             Intent it = new Intent(MainActivity.this, Login.class);
             startActivity(it);
+            finish();
         }
 
 
@@ -271,7 +274,7 @@ public class MainActivity extends AppCompatActivity
                         hashMap.put("user_long", String.valueOf(srclocation.longitude));
                         hashMap.put("dest_lat", String.valueOf(destination.latitude));
                         hashMap.put("dest_long", String.valueOf(destination.longitude));
-                        hashMap.put("user_id", message);
+                        hashMap.put("user_id", session.getusername());
                         //fab.setEnabled(false);
 
 
@@ -286,17 +289,41 @@ public class MainActivity extends AppCompatActivity
         });
 
 
+
     }
 
 
     @Override
     public void onBackPressed() {
-       /* DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+       DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)  ) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }*/
+
+
+        }
+        else
+        {
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Parking Allocation")
+                    .setMessage("Are you sure you want to Exit")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                          //  startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                            finish();
+                        }
+
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        }
+
+
+
+
+
 
     }
 
@@ -329,9 +356,15 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_Login) {
-            Intent it = new Intent(MainActivity.this, Login.class);
-            startActivity(it);
+            if(session.getusername().isEmpty()) {
+                Intent it = new Intent(MainActivity.this, Login.class);
+                startActivity(it);
+            }
+            else
+                Toast.makeText(getApplicationContext(), "You are already LOGGED IN", Toast.LENGTH_SHORT).show();
+
         } else if (id == R.id.nav_Rate) {
+            startActivity(new Intent(getApplicationContext(),RateCard.class));
 
         } else if (id == R.id.nav_Payments) {
 
@@ -423,7 +456,7 @@ public class MainActivity extends AppCompatActivity
             //Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
             //mMap.addMarker(new MarkerOptions().position(current));
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(srclocation,17.0f));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(srclocation,16.0f));
 
 
             // Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();

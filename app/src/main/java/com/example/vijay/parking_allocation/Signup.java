@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,7 +26,8 @@ import java.util.Map;
 
 public class Signup extends AppCompatActivity {
     EditText passwordd,mobphone,mail,usrusr;
-    TextView login,signup;
+    TextView login;
+    Button signup;
 
 
     private static final String URL = "https://shayongupta.000webhostapp.com/user_info/user_signup.php";
@@ -42,7 +44,7 @@ public class Signup extends AppCompatActivity {
         mail = (EditText) findViewById(R.id.mail);
         mobphone = (EditText) findViewById(R.id.mobphone);
         login = (TextView)findViewById(R.id.logiin);
-        signup = (TextView)findViewById(R.id.sup);
+        signup = (Button) findViewById(R.id.sup);
 
         Typeface custom_font = Typeface.createFromAsset(getAssets(),"fonts/Lato-Light.ttf");
         signup.setTypeface(custom_font);
