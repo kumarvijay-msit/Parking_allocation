@@ -112,7 +112,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
       /*  View decorView = getWindow().getDecorView();
 // Hide the status bar.
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
@@ -129,6 +128,8 @@ public class MainActivity extends AppCompatActivity
         message = intent.getStringExtra(Login.EXTRA_MESSAGE);
         sMapFragment = SupportMapFragment.newInstance();
         setContentView(R.layout.activity_main);
+        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+
         ImageView imgv = (ImageView) findViewById(R.id.imageView1);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -214,7 +215,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
 
-
+                findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
 
              //   Toast.makeText(getApplicationContext(),"gugugaga"+ name, Toast.LENGTH_SHORT).show();
 
@@ -244,6 +245,7 @@ public class MainActivity extends AppCompatActivity
                                 String urlnew = getDirectionsUrl(srclocation, parkloc);
                                 DownloadTask downloadTask1 = new DownloadTask();
                                 downloadTask1.execute(urlnew);
+                                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                                /* setLocationMarker(22.5145,88.4033,3);
                                 destloc = new LatLng(22.5145,88.4033);
                                 String url = getDirectionsUrl(srclocation , destloc);
