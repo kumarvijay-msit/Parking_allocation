@@ -187,16 +187,20 @@ public class MainActivity extends AppCompatActivity
                     public void onPlaceSelected(Place place) {
                         // TODO: Get info about the selected place.
                         //  Log.i(TAG, "Place: " + place.getName());
+                        mMap.clear();
+
+                        myMarkersrc.setDraggable(false);
                         LatLng destlocation = place.getLatLng();
 
                         if(location_enabled == true) {
 
 
                             fab.setEnabled(true);
-                            mMap.clear();
+
+                            setLocationMarker(srclocation.latitude, srclocation.longitude, 1);
                             destination = destlocation;
 
-                            myMarkersrc.isDraggable();
+                            myMarkersrc.setDraggable(false);
 
 
                             mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
@@ -226,8 +230,9 @@ public class MainActivity extends AppCompatActivity
                                 }
                             });
 
-                            setLocationMarker(srclocation.latitude, srclocation.longitude, 1);
+
                             setLocationMarker(destination.latitude, destination.longitude, 2);
+
                         }
                         else
                         {
@@ -520,6 +525,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onMyLocationButtonClick() {
         gps = new TrackGps(MainActivity.this);
+        mMap.clear();
 
 
         if (gps.canGetLocation()) {
@@ -618,7 +624,7 @@ public class MainActivity extends AppCompatActivity
                 myMarkersrc.remove();
                 myMarkersrc = null;
             }
-            myMarkersrc = mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).draggable(true));
+            myMarkersrc = mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.fromResource(R.drawable.src_marker)).draggable(true));
         }
 
 
@@ -631,7 +637,7 @@ public class MainActivity extends AppCompatActivity
             }
 
 
-            myMarkerDest = mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).draggable(true));
+            myMarkerDest = mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.fromResource(R.drawable.dest_marker)).draggable(true));
 
         }
         if (ids == 3) {
@@ -641,7 +647,7 @@ public class MainActivity extends AppCompatActivity
                 myparking.remove();
                 myparking = null;
             }
-            myparking = mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+            myparking = mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.fromResource(R.drawable.parking_marker)));
         }
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(current));
