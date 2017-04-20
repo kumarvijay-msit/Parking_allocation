@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity
 
     String message;
     FloatingActionButton fab;
-    static boolean flag = false;
+    static boolean flag = false,flags = false;
     static boolean location_enabled = false;
 
 
@@ -187,15 +187,18 @@ public class MainActivity extends AppCompatActivity
                     public void onPlaceSelected(Place place) {
                         // TODO: Get info about the selected place.
                         //  Log.i(TAG, "Place: " + place.getName());
+                        LatLng destlocation = place.getLatLng();
 
                         if(location_enabled == true) {
 
-                            final LatLng destlocation = place.getLatLng();
+
                             fab.setEnabled(true);
                             mMap.clear();
-
-
                             destination = destlocation;
+
+                            myMarkersrc.isDraggable();
+
+
                             mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                                 @Override
                                 public void onMarkerDragStart(Marker arg0) {
@@ -559,6 +562,7 @@ public class MainActivity extends AppCompatActivity
                 }
             });
             location_enabled= true;
+
 
 
             // Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
