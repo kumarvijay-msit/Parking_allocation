@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,9 +24,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class signup extends AppCompatActivity {
+public class Signup extends AppCompatActivity {
     EditText passwordd,mobphone,mail,usrusr;
-    TextView login,signup;
+    TextView login;
+    Button signup;
 
 
     private static final String URL = "https://shayongupta.000webhostapp.com/user_info/user_signup.php";
@@ -42,7 +44,7 @@ public class signup extends AppCompatActivity {
         mail = (EditText) findViewById(R.id.mail);
         mobphone = (EditText) findViewById(R.id.mobphone);
         login = (TextView)findViewById(R.id.logiin);
-        signup = (TextView)findViewById(R.id.sup);
+        signup = (Button) findViewById(R.id.sup);
 
         Typeface custom_font = Typeface.createFromAsset(getAssets(),"fonts/Lato-Light.ttf");
         signup.setTypeface(custom_font);
@@ -63,7 +65,7 @@ public class signup extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             if(jsonObject.names().get(0).equals("success")){
                                 Toast.makeText(getApplicationContext(),"SUCCESS "+jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(getApplicationContext(),login.class));
+                                startActivity(new Intent(getApplicationContext(),Login.class));
                             }else {
                                 Toast.makeText(getApplicationContext(), "Error" +jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
                             }
@@ -99,7 +101,7 @@ public class signup extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent it = new Intent(signup.this,login.class);
+                Intent it = new Intent(Signup.this,Login.class);
                 startActivity(it);
             }
         });
