@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity
                             });
 
                             setLocationMarker(srclocation.latitude, srclocation.longitude, 1);
-                            setLocationMarker(destlocation.latitude, destlocation.longitude, 2);
+                            setLocationMarker(destination.latitude, destination.longitude, 2);
                         }
                         else
                         {
