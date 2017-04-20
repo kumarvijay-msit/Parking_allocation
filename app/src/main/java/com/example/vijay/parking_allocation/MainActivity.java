@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -67,6 +68,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.content.Intent.ACTION_SENDTO;
+import static android.content.Intent.EXTRA_SUBJECT;
+import static android.content.Intent.EXTRA_TEXT;
+import static android.text.TextUtils.isEmpty;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -101,10 +107,10 @@ public class MainActivity extends AppCompatActivity
     double parklong = 0.0;
     LatLng parkloc;
 
-    Marker myMarkersrc = null, myMarkerDest = null,myparking = null;
+    Marker myMarkersrc = null, myMarkerDest = null, myparking = null;
     DrawerLayout drawer;
     SessionHandel session;
-    String  name = null;
+    String name = null;
     TextView t;
     FloatingActionButton imgMyLocation;
 
@@ -123,7 +129,6 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-
         Intent intent = getIntent();
         message = intent.getStringExtra(Login.EXTRA_MESSAGE);
         sMapFragment = SupportMapFragment.newInstance();
@@ -137,23 +142,19 @@ public class MainActivity extends AppCompatActivity
         name = session.getusername();
 
         //t = (TextView)findViewById(R.id.user_name);
-        if(session.getusername().isEmpty())
-        {
+        if (session.getusername().isEmpty()) {
             Intent it = new Intent(MainActivity.this, Login.class);
             startActivity(it);
             finish();
         }
 
 
-
-
-
         imgv.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                t = (TextView)findViewById(R.id.user_name);
-                if(name.isEmpty())
-                    name="Welcome Guest";
+                t = (TextView) findViewById(R.id.user_name);
+                if (name.isEmpty())
+                    name = "Welcome Guest";
                 t.setText(name);
                 drawer.openDrawer(Gravity.START);
             }
@@ -217,7 +218,7 @@ public class MainActivity extends AppCompatActivity
 
                 findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
 
-             //   Toast.makeText(getApplicationContext(),"gugugaga"+ name, Toast.LENGTH_SHORT).show();
+                //   Toast.makeText(getApplicationContext(),"gugugaga"+ name, Toast.LENGTH_SHORT).show();
 
                 request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                     @Override
@@ -291,29 +292,25 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-
     }
 
 
     @Override
     public void onBackPressed() {
-       DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)  ) {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
 
 
-        }
-        else
-        {
+        } else {
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setTitle("Parking Allocation")
                     .setMessage("Are you sure you want to Exit")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-                    {
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                          //  startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                            //  startActivity(new Intent(getApplicationContext(),MainActivity.class));
                             finish();
                         }
 
@@ -321,10 +318,6 @@ public class MainActivity extends AppCompatActivity
                     .setNegativeButton("No", null)
                     .show();
         }
-
-
-
-
 
 
     }
@@ -358,15 +351,14 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_Login) {
-            if(session.getusername().isEmpty()) {
+            if (session.getusername().isEmpty()) {
                 Intent it = new Intent(MainActivity.this, Login.class);
                 startActivity(it);
-            }
-            else
+            } else
                 Toast.makeText(getApplicationContext(), "You are already LOGGED IN", Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_Rate) {
-            startActivity(new Intent(getApplicationContext(),RateCard.class));
+            startActivity(new Intent(getApplicationContext(), RateCard.class));
 
         } else if (id == R.id.nav_Payments) {
 
@@ -378,12 +370,37 @@ public class MainActivity extends AppCompatActivity
             startActivity(i);
 
         } else if (id == R.id.nav_share) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
+           /* Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setType("message/rfc822");
             intent.putExtra(Intent.EXTRA_SUBJECT, "Parking Allocation");
             intent.putExtra(Intent.EXTRA_TEXT, "link to parking allocation app");
             Intent mailer = Intent.createChooser(intent, null);
-            startActivity(mailer);
+            startActivity(mailer);*/
+
+            Intent intent = new Intent(ACTION_SENDTO);
+            // intent.setType("text/plain");
+            intent.setType("message/rfc822");
+            String mailTo = "kumarvijay2510@gmail.com";
+            String mailCC = "";
+            String subject = "Parking allocation app";
+            String body = "Link to parking allocation";
+            if (mailTo == null) {
+                mailTo = "";
+            }
+            intent.setData(Uri.parse("mailto:" + mailTo));
+            if (!isEmpty(mailCC)) {
+                intent.putExtra(Intent.EXTRA_CC, new String[]{mailCC});
+            }
+            if (!isEmpty(subject)) {
+                intent.putExtra(EXTRA_SUBJECT, subject);
+            }
+            if (isEmpty(body)) {
+                intent.putExtra(EXTRA_TEXT, body);
+            }
+            startActivity(Intent.createChooser(intent,"Sending"));
+
+
+
 
         } else if (id == R.id.nav_Support) {
 
@@ -400,8 +417,8 @@ public class MainActivity extends AppCompatActivity
         //map.clear();
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setMapToolbarEnabled(true);
-       // mMap.setOnMyLocationButtonClickListener(this);
-        FloatingActionButton fab1 = (FloatingActionButton)findViewById(R.id.imgMyLocation) ;
+        // mMap.setOnMyLocationButtonClickListener(this);
+        FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.imgMyLocation);
         fab1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
@@ -464,7 +481,7 @@ public class MainActivity extends AppCompatActivity
             //Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
             //mMap.addMarker(new MarkerOptions().position(current));
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(srclocation,16.0f));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(srclocation, 16.0f));
 
 
             // Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
