@@ -190,12 +190,38 @@ public class MainActivity extends AppCompatActivity
 
                         if(location_enabled == true) {
 
-                            LatLng destlocation = place.getLatLng();
+                            final LatLng destlocation = place.getLatLng();
                             fab.setEnabled(true);
                             mMap.clear();
 
 
                             destination = destlocation;
+                            mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                                @Override
+                                public void onMarkerDragStart(Marker arg0) {
+                                    // TODO Auto-generated method stub
+
+
+                                    Log.d("System out", "onMarkerDragStart..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
+                                }
+
+                                @SuppressWarnings("unchecked")
+                                @Override
+                                public void onMarkerDragEnd(Marker arg0) {
+                                    // TODO Auto-generated method stub
+                                    Log.d("System out", "onMarkerDragEnd..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
+                                    double dest_lattitude = arg0.getPosition().latitude;
+                                    double dest_longitude = arg0.getPosition().longitude;
+                                    destination = new LatLng(dest_lattitude, dest_longitude);
+                                    mMap.animateCamera(CameraUpdateFactory.newLatLng(arg0.getPosition()));
+                                }
+
+                                @Override
+                                public void onMarkerDrag(Marker arg0) {
+                                    // TODO Auto-generated method stub
+                                    Log.i("System out", "onMarkerDrag...");
+                                }
+                            });
 
                             setLocationMarker(srclocation.latitude, srclocation.longitude, 1);
                             setLocationMarker(destlocation.latitude, destlocation.longitude, 2);
@@ -601,7 +627,7 @@ public class MainActivity extends AppCompatActivity
             }
 
 
-            myMarkerDest = mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            myMarkerDest = mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).draggable(true));
 
         }
         if (ids == 3) {
