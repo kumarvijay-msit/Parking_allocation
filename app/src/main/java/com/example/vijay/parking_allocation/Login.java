@@ -78,6 +78,7 @@ public class Login extends AppCompatActivity {
                                // Toast.makeText(getApplicationContext(),session.getusername(), Toast.LENGTH_SHORT).show();
 
                                 startActivity(new Intent(getApplicationContext(),MainActivity.class).putExtra(EXTRA_MESSAGE, message));
+                                finish();
 
                             }
                             else {
@@ -120,6 +121,7 @@ public class Login extends AppCompatActivity {
             {
                 Intent it = new Intent(Login.this, Signup.class);
                 startActivity(it);
+                finish();
             }
         });
     }
@@ -130,6 +132,7 @@ public class Login extends AppCompatActivity {
         if(!session.getusername().isEmpty())
         {
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
+            finish();
 
         }else {
 
