@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity
     String message;
     FloatingActionButton fab;
     static boolean flag = false;
+    static boolean location_enabled = false;
 
 
     double parklat = 0.0;
@@ -175,20 +176,36 @@ public class MainActivity extends AppCompatActivity
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.getView().setBackgroundColor(Color.WHITE);
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                //  Log.i(TAG, "Place: " + place.getName());
-                LatLng destlocation = place.getLatLng();
-                fab.setEnabled(true);
-                mMap.clear();
 
 
-                destination = destlocation;
 
-                setLocationMarker(srclocation.latitude, srclocation.longitude, 1);
-                setLocationMarker(destlocation.latitude, destlocation.longitude, 2);
+
+
+                autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+
+                    @Override
+                    public void onPlaceSelected(Place place) {
+                        // TODO: Get info about the selected place.
+                        //  Log.i(TAG, "Place: " + place.getName());
+
+                        if(location_enabled == true) {
+
+                            LatLng destlocation = place.getLatLng();
+                            fab.setEnabled(true);
+                            mMap.clear();
+
+
+                            destination = destlocation;
+
+                            setLocationMarker(srclocation.latitude, srclocation.longitude, 1);
+                            setLocationMarker(destlocation.latitude, destlocation.longitude, 2);
+                        }
+                        else
+                        {
+                            Toast.makeText(getApplicationContext(), "Please Navigate to Current Location", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+
+                        }
 
 
               /* String url = getDirectionsUrl(destloc , destlocation);
@@ -197,14 +214,17 @@ public class MainActivity extends AppCompatActivity
                 downloadTask.execute(url);*/
 
 
-            }
+                    }
 
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-                //  Log.i(TAG, "An error occurred: " + status);
-            }
-        });
+                    @Override
+                    public void onError(Status status) {
+                        // TODO: Handle the error.
+                        //  Log.i(TAG, "An error occurred: " + status);
+                    }
+                });
+
+
+
 
         requestQueue = Volley.newRequestQueue(this);
 
@@ -302,7 +322,7 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
 
 
-        } else {
+        } else if(!session.getusername().isEmpty()) {
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setTitle("Parking Allocation")
@@ -318,6 +338,7 @@ public class MainActivity extends AppCompatActivity
                     .setNegativeButton("No", null)
                     .show();
         }
+
 
 
     }
@@ -368,6 +389,7 @@ public class MainActivity extends AppCompatActivity
             session.destroySession();
             Intent i = new Intent(getApplicationContext(), Login.class);
             startActivity(i);
+            finish();
 
         } else if (id == R.id.nav_share) {
            /* Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -424,6 +446,7 @@ public class MainActivity extends AppCompatActivity
                 // Perform action on click
                 onMyLocationButtonClick();
                 enableMyLocation();
+                location_enabled=true;
 
             }
         });
@@ -482,6 +505,7 @@ public class MainActivity extends AppCompatActivity
             //mMap.addMarker(new MarkerOptions().position(current));
 
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(srclocation, 16.0f));
+            location_enabled= true;
 
 
             // Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
