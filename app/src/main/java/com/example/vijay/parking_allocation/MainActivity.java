@@ -452,6 +452,7 @@ public class MainActivity extends AppCompatActivity
         });
 
 
+
 //
     }
 
@@ -505,6 +506,32 @@ public class MainActivity extends AppCompatActivity
             //mMap.addMarker(new MarkerOptions().position(current));
 
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(srclocation, 16.0f));
+            mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                @Override
+                public void onMarkerDragStart(Marker arg0) {
+                    // TODO Auto-generated method stub
+
+
+                    Log.d("System out", "onMarkerDragStart..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
+                }
+
+                @SuppressWarnings("unchecked")
+                @Override
+                public void onMarkerDragEnd(Marker arg0) {
+                    // TODO Auto-generated method stub
+                    Log.d("System out", "onMarkerDragEnd..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
+                    double src_lattitude = arg0.getPosition().latitude;
+                    double src_longitude = arg0.getPosition().longitude;
+                    srclocation = new LatLng(src_lattitude, src_longitude);
+                    mMap.animateCamera(CameraUpdateFactory.newLatLng(arg0.getPosition()));
+                }
+
+                @Override
+                public void onMarkerDrag(Marker arg0) {
+                    // TODO Auto-generated method stub
+                    Log.i("System out", "onMarkerDrag...");
+                }
+            });
             location_enabled= true;
 
 
@@ -561,7 +588,7 @@ public class MainActivity extends AppCompatActivity
                 myMarkersrc.remove();
                 myMarkersrc = null;
             }
-            myMarkersrc = mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            myMarkersrc = mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).draggable(true));
         }
 
 
