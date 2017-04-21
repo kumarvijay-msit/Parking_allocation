@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context="com.example.vijay.parking_allocation.car_details.CarDetails">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/add_car"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="       Add Car       "
+           />
+
+        <Button
+            android:id="@+id/del_car"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="    Delete Car    " />
+
+        <Button
+            android:id="@+id/show_car"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show Car List " />
+
+
+    </LinearLayout>
+
+</LinearLayout>

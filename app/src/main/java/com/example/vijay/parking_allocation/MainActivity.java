@@ -38,6 +38,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.vijay.parking_allocation.car_details.CarDetails;
+import com.example.vijay.parking_allocation.user.Login;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
@@ -415,9 +417,15 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_Rate) {
             startActivity(new Intent(getApplicationContext(), RateCard.class));
 
-        } else if (id == R.id.nav_Payments) {
+        } else if (id == R.id.car_details) {
+            Intent i = new Intent(getApplicationContext(), CarDetails.class);
+            startActivity(i);
 
-        } else if (id == R.id.nav_Logout) {
+
+        }
+        else if (id == R.id.nav_Payments) {
+
+        }else if (id == R.id.nav_Logout) {
 
 
             session.destroySession();
