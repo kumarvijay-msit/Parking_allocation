@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -25,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Signup extends AppCompatActivity {
-    EditText passwordd,mobphone,mail,usrusr;
+    EditText passwordd,mobphone,mail,usrusr,car_no;
     TextView login;
     Button signup;
 
@@ -45,9 +44,11 @@ public class Signup extends AppCompatActivity {
         mobphone = (EditText) findViewById(R.id.mobphone);
         login = (TextView)findViewById(R.id.logiin);
         signup = (Button) findViewById(R.id.sup);
+        car_no = (EditText)findViewById(R.id.car_no);
 
         Typeface custom_font = Typeface.createFromAsset(getAssets(),"fonts/Lato-Light.ttf");
         signup.setTypeface(custom_font);
+        car_no.setTypeface(custom_font);
         mail.setTypeface(custom_font);
         mobphone.setTypeface(custom_font);
         passwordd.setTypeface(custom_font);
@@ -89,6 +90,7 @@ public class Signup extends AppCompatActivity {
                         hashMap.put("username",usrusr.getText().toString());
                         hashMap.put("password",passwordd.getText().toString());
                         hashMap.put("mob_no",mobphone.getText().toString() );
+                        hashMap.put("car_no",car_no.getText().toString() );
                         return hashMap;
                     }
                 };
