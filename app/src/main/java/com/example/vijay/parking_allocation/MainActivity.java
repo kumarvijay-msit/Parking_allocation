@@ -3,6 +3,8 @@ package com.example.vijay.parking_allocation;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,9 +28,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -66,6 +72,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,6 +88,8 @@ public class MainActivity extends AppCompatActivity
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final String URL = "https://shayongupta.000webhostapp.com/booking/user_control.php";
+    private static final String URL_CAR_LIST = "https://shayongupta.000webhostapp.com/user_info/user_show_car.php";
+    private static final String URL_SHOW_CAR = "https://shayongupta.000webhostapp.com/user_info/user_show_car.php";
     SupportMapFragment sMapFragment;
     GoogleMap gMap;
     Marker currLocationMarker;
@@ -96,14 +105,17 @@ public class MainActivity extends AppCompatActivity
     ArrayList<LatLng> markerPoints;
     static LatLng srclocation;
     static LatLng destination;
-    Button btn1;
-    private RequestQueue requestQueue;
-    private StringRequest request;
-
+    Button btn1,show_cars;
+    private RequestQueue requestQueue,dropdownQueue;
+    private StringRequest request,dropdownRequest;
+    Spinner spinner;
     String message;
     FloatingActionButton fab;
     static boolean flag = false,flags = false;
     static boolean location_enabled = false;
+
+    ArrayList<String> options=new ArrayList<String>();
+    ArrayAdapter<String> adapters;
 
 
     double parklat = 0.0;
@@ -116,10 +128,65 @@ public class MainActivity extends AppCompatActivity
     String name = null;
     TextView t;
     FloatingActionButton imgMyLocation;
+    View b1,b2,b3,b4;
+    ArrayAdapter<String> adapter;
+
+    private TextView start_time,end_time;
+    private Button start_btn,end_btn;
+
+    String car_selected;
+
+    private int sHour,eHour;
+    private int sMinute,eMinute;
+    /** This integer will uniquely define the dialog to be used for displaying time picker.*/
+    static final int TIME_DIALOG_START = 0;
+    static final int TIME_DIALOG_END = 1;
+    /** Callback received when the user "picks" a time in the dialog */
+    private TimePickerDialog.OnTimeSetListener mTimeSetListener =
+            new TimePickerDialog.OnTimeSetListener() {
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                    sHour = hourOfDay;
+                    sMinute = minute;
+                    updateDisplay();
+                    displayToast();
+                }
+            };
+
+    /** Updates the time in the TextView */
+    private void updateDisplay() {
+        start_time.setText(
+                new StringBuilder()
+                        .append(pad(sHour)).append(":")
+                        .append(pad(sMinute)));
+    }
+    private void updateDisplayEnd() {
+        end_time.setText(
+                new StringBuilder()
+                        .append(pad(eHour)).append(":")
+                        .append(pad(eMinute)));
+    }
+
+    private void displayToast() {
+        Toast.makeText(this, new StringBuilder().append("Time choosen is ").append(start_time.getText()),   Toast.LENGTH_SHORT).show();
+
+    }
+
+    /** Add padding to numbers less than ten */
+    private static String pad(int c) {
+        if (c >= 10)
+            return String.valueOf(c);
+        else
+            return "0" + String.valueOf(c);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
+
 
       /*  View decorView = getWindow().getDecorView();
 // Hide the status bar.
@@ -136,6 +203,30 @@ public class MainActivity extends AppCompatActivity
         message = intent.getStringExtra(Login.EXTRA_MESSAGE);
         sMapFragment = SupportMapFragment.newInstance();
         setContentView(R.layout.activity_main);
+
+        start_time = (TextView) findViewById(R.id.Start_time);
+        start_btn = (Button) findViewById(R.id.Start_btn);
+        end_time = (TextView) findViewById(R.id.End_time);
+        end_btn = (Button) findViewById(R.id.End_btn);
+
+
+        b1 = findViewById(R.id.Start_btn);
+        b1.setVisibility(View.GONE);
+
+        b2 = findViewById(R.id.Start_time);
+        b2.setVisibility(View.GONE);
+
+        b3 = findViewById(R.id.End_time);
+        b3.setVisibility(View.GONE);
+
+        b4 = findViewById(R.id.End_btn);
+        b4.setVisibility(View.GONE);
+
+        spinner = (Spinner) findViewById(R.id.car_spinner);
+        spinner.setVisibility(View.GONE);
+
+
+
         findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
         ImageView imgv = (ImageView) findViewById(R.id.imageView1);
@@ -234,6 +325,10 @@ public class MainActivity extends AppCompatActivity
 
 
                             setLocationMarker(destination.latitude, destination.longitude, 2);
+                           b1.setVisibility(View.VISIBLE);
+                            b2.setVisibility(View.VISIBLE);
+                            b3.setVisibility(View.VISIBLE);
+                            b4.setVisibility(View.VISIBLE);
 
                         }
                         else
@@ -258,6 +353,135 @@ public class MainActivity extends AppCompatActivity
                         //  Log.i(TAG, "An error occurred: " + status);
                     }
                 });
+
+
+
+
+
+        /** Listener for click event of the button */
+        start_btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                showDialog(TIME_DIALOG_START);
+            }
+        });
+
+
+
+        end_btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                showDialog(TIME_DIALOG_END);
+                show_cars.setVisibility(View.VISIBLE);
+                b1.setVisibility(View.INVISIBLE);
+                b2.setVisibility(View.INVISIBLE);
+                b3.setVisibility(View.INVISIBLE);
+                b4.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        adapters = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,options);
+        spinner.setAdapter(adapters);
+
+        show_cars = (Button)findViewById(R.id.show_cars);
+        show_cars.setVisibility(View.INVISIBLE);
+
+
+
+        dropdownQueue = Volley.newRequestQueue(this);
+
+        show_cars.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spinner.setVisibility(View.VISIBLE);
+
+
+                // Add new Items to List
+                dropdownRequest = new StringRequest(Request.Method.POST, URL_SHOW_CAR, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.names().get(0).equals("success")) {
+                                int i=0;
+                                while(!jsonObject.getString(String.valueOf(i)).equals("end")){
+
+                                    options.add(jsonObject.getString(String.valueOf(i)));
+                                    //Toast.makeText(getApplicationContext(), jsonObject.getString(String.valueOf(i)), Toast.LENGTH_SHORT).show();
+                                    i++;
+
+
+                                }
+                                adapters.notifyDataSetChanged();
+                                // Toast.makeText(getApplicationContext(), jsonObject.getString("0"), Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(getApplicationContext(), jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        HashMap<String, String> hashMap = new HashMap<String, String>();
+                        hashMap.put("id",session.getuserId());
+                        //  hashMap.put("id", session.getuserId());
+                        //  Toast.makeText(getApplicationContext(), "Successfull", Toast.LENGTH_SHORT).show();
+                        //fab.setEnabled(false);
+
+
+                        return hashMap;
+                    }
+                };
+
+                dropdownQueue.add(dropdownRequest);
+
+                adapters.notifyDataSetChanged();
+                show_cars.setVisibility(View.INVISIBLE);
+
+            }
+
+
+        });
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                 car_selected = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //Another interface callback
+            }
+        });
+
+
+
+
+
+
+
+        /** Get the current time */
+        final Calendar cal = Calendar.getInstance();
+        sHour = cal.get(Calendar.HOUR_OF_DAY);
+        sMinute = cal.get(Calendar.MINUTE);
+        updateDisplay();
+        eHour = cal.get(Calendar.HOUR_OF_DAY);
+        eMinute = cal.get(Calendar.MINUTE);
+        updateDisplayEnd();
+
+        /** Display the current time in the TextView */
+
+
 
 
 
@@ -303,12 +527,19 @@ public class MainActivity extends AppCompatActivity
                                 DownloadTask downloadTask1 = new DownloadTask();
                                 downloadTask1.execute(urlnew);
                                 findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                                b1.setVisibility(View.GONE);
+                                b2.setVisibility(View.GONE);
+                                b3.setVisibility(View.GONE);
+                                b4.setVisibility(View.GONE);
+                                spinner.setVisibility(View.GONE);
+
                                /* setLocationMarker(22.5145,88.4033,3);
                                 destloc = new LatLng(22.5145,88.4033);
                                 String url = getDirectionsUrl(srclocation , destloc);
                                 DownloadTask downloadTask = new DownloadTask();
                                 // Start downloading json data from Google Directions API
                                 downloadTask.execute(url);*/
+                                Toast.makeText(getApplicationContext(), "BOOKING SUCCESSFULL", Toast.LENGTH_LONG).show();
 
                             } else {
                                 Toast.makeText(getApplicationContext(), jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
@@ -333,9 +564,11 @@ public class MainActivity extends AppCompatActivity
                         hashMap.put("user_long", String.valueOf(srclocation.longitude));
                         hashMap.put("dest_lat", String.valueOf(destination.latitude));
                         hashMap.put("dest_long", String.valueOf(destination.longitude));
-                        hashMap.put("user_id", session.getusername());
-                        //fab.setEnabled(false);
+                        hashMap.put("id", session.getuserId());
+                        hashMap.put("car_no", car_selected);
 
+
+                        //fab.setEnabled(false);
 
                         return hashMap;
                     }
@@ -350,6 +583,17 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case TIME_DIALOG_START:
+                return new TimePickerDialog(this,
+                        mTimeSetListener, sHour, sMinute, false);
+            case TIME_DIALOG_END:
+                return new TimePickerDialog(this,
+                        mTimeSetListener, eHour, eMinute, false);
+        }
+        return null;
+    }
 
     @Override
     public void onBackPressed() {

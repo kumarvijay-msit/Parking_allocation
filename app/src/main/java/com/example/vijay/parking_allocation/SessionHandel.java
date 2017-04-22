@@ -21,11 +21,24 @@ public class SessionHandel {
     public void setusername(String username) {
         prefs.edit().putString("username", username).commit();
 
+
     }
+
+    public void setuserId(String user_id) {
+        prefs.edit().putString("user_id", user_id).commit();
+
+
+    }
+
 
     public String getusername() {
         String username = prefs.getString("username","");
         return username;
+    }
+
+    public String getuserId() {
+        String user_id = prefs.getString("user_id","");
+        return user_id;
     }
 
     public boolean isLoggedIn(){

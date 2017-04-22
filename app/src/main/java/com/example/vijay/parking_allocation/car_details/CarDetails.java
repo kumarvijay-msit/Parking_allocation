@@ -23,7 +23,7 @@ public class CarDetails extends AppCompatActivity {
                 // Perform action on click
 
                 startActivity(new Intent(getApplicationContext(),Car_Details_Add.class));
-                finish();
+
             }
         });
 
@@ -39,7 +39,7 @@ public class CarDetails extends AppCompatActivity {
             public void onClick(View v) {
                 // Perform action on click
                 startActivity(new Intent(getApplicationContext(),ShowCarList.class));
-                finish();
+
             }
         });
     }

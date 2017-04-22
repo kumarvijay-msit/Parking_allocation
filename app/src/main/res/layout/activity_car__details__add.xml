@@ -8,17 +8,26 @@
     <EditText
         android:id="@+id/edit1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text=""/>
     <Button
         android:id="@+id/addBtn"
         android:text="Add New Car"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:onClick="addItems"/>
+        />
     <ListView
         android:id="@+id/list_item"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:drawSelectorOnTop="false"
         />
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+
+    </RelativeLayout>
 </LinearLayout>

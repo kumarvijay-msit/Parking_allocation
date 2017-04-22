@@ -39,6 +39,7 @@ public class Login extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "MESSAGE";
     String message = "";
     private SessionHandel session;//global variable
+    String user_id = "";
 
 
     @Override
@@ -76,9 +77,10 @@ public class Login extends AppCompatActivity {
                             if(jsonObject.names().get(0).equals("success")){
                                 Toast.makeText(getApplicationContext(),jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
                                 message = jsonObject.getString("user_id");
-
+                                user_id = jsonObject.getString("id");
                                 session.setusername(message);
-                               // Toast.makeText(getApplicationContext(),session.getusername(), Toast.LENGTH_SHORT).show();
+                                session.setuserId(user_id);
+                               //Toast.makeText(getApplicationContext(),session.getusername(), Toast.LENGTH_SHORT).show();
 
                                 startActivity(new Intent(getApplicationContext(),MainActivity.class).putExtra(EXTRA_MESSAGE, message));
                                 finish();
