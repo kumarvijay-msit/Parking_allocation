@@ -105,18 +105,19 @@ public class MainActivity extends AppCompatActivity
     ArrayList<LatLng> markerPoints;
     static LatLng srclocation;
     static LatLng destination;
-    Button btn1,show_cars;
-    private RequestQueue requestQueue,dropdownQueue;
-    private StringRequest request,dropdownRequest;
+    Button btn1, show_cars;
+    private RequestQueue requestQueue, dropdownQueue;
+    private StringRequest request, dropdownRequest;
     Spinner spinner;
     String message;
     FloatingActionButton fab;
-    static boolean flag = false,flags = false;
+    static boolean flag = false, flags = false;
     static boolean location_enabled = false;
 
-    ArrayList<String> options=new ArrayList<String>();
+    ArrayList<String> options = new ArrayList<String>();
     ArrayAdapter<String> adapters;
 
+    StringBuilder start_time_park,end_time_park;
 
     double parklat = 0.0;
     double parklong = 0.0;
@@ -128,20 +129,24 @@ public class MainActivity extends AppCompatActivity
     String name = null;
     TextView t;
     FloatingActionButton imgMyLocation;
-    View b1,b2,b3,b4;
+    View b1, b2, b3, b4;
     ArrayAdapter<String> adapter;
 
-    private TextView start_time,end_time;
-    private Button start_btn,end_btn;
+    private TextView start_time, end_time;
+    private Button start_btn, end_btn;
 
     String car_selected;
 
-    private int sHour,eHour;
-    private int sMinute,eMinute;
-    /** This integer will uniquely define the dialog to be used for displaying time picker.*/
+    private int sHour, eHour;
+    private int sMinute, eMinute;
+    /**
+     * This integer will uniquely define the dialog to be used for displaying time picker.
+     */
     static final int TIME_DIALOG_START = 0;
     static final int TIME_DIALOG_END = 1;
-    /** Callback received when the user "picks" a time in the dialog */
+    /**
+     * Callback received when the user "picks" a time in the dialog
+     */
     private TimePickerDialog.OnTimeSetListener mTimeSetListener =
             new TimePickerDialog.OnTimeSetListener() {
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -152,26 +157,37 @@ public class MainActivity extends AppCompatActivity
                 }
             };
 
-    /** Updates the time in the TextView */
+    /**
+     * Updates the time in the TextView
+     */
     private void updateDisplay() {
         start_time.setText(
                 new StringBuilder()
                         .append(pad(sHour)).append(":")
                         .append(pad(sMinute)));
+        start_time_park = new StringBuilder()
+                .append(pad(sHour)).append(":")
+                .append(pad(sMinute));
     }
+
     private void updateDisplayEnd() {
         end_time.setText(
                 new StringBuilder()
                         .append(pad(eHour)).append(":")
                         .append(pad(eMinute)));
+        end_time_park = new StringBuilder()
+                .append(pad(eHour)).append(":")
+                .append(pad(eMinute));
     }
 
     private void displayToast() {
-        Toast.makeText(this, new StringBuilder().append("Time choosen is ").append(start_time.getText()),   Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, new StringBuilder().append("Time choosen is ").append(start_time.getText()), Toast.LENGTH_SHORT).show();
 
     }
 
-    /** Add padding to numbers less than ten */
+    /**
+     * Add padding to numbers less than ten
+     */
     private static String pad(int c) {
         if (c >= 10)
             return String.valueOf(c);
@@ -226,7 +242,6 @@ public class MainActivity extends AppCompatActivity
         spinner.setVisibility(View.GONE);
 
 
-
         findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
         ImageView imgv = (ImageView) findViewById(R.id.imageView1);
@@ -271,72 +286,67 @@ public class MainActivity extends AppCompatActivity
         autocompleteFragment.getView().setBackgroundColor(Color.WHITE);
 
 
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                //  Log.i(TAG, "Place: " + place.getName());
+                mMap.clear();
+
+                myMarkersrc.setDraggable(false);
+                LatLng destlocation = place.getLatLng();
+
+                if (location_enabled == true) {
 
 
+                    fab.setEnabled(true);
 
-                autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                    setLocationMarker(srclocation.latitude, srclocation.longitude, 1);
+                    destination = destlocation;
 
-                    @Override
-                    public void onPlaceSelected(Place place) {
-                        // TODO: Get info about the selected place.
-                        //  Log.i(TAG, "Place: " + place.getName());
-                        mMap.clear();
-
-                        myMarkersrc.setDraggable(false);
-                        LatLng destlocation = place.getLatLng();
-
-                        if(location_enabled == true) {
+                    myMarkersrc.setDraggable(false);
 
 
-                            fab.setEnabled(true);
-
-                            setLocationMarker(srclocation.latitude, srclocation.longitude, 1);
-                            destination = destlocation;
-
-                            myMarkersrc.setDraggable(false);
+                    mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                        @Override
+                        public void onMarkerDragStart(Marker arg0) {
+                            // TODO Auto-generated method stub
 
 
-                            mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-                                @Override
-                                public void onMarkerDragStart(Marker arg0) {
-                                    // TODO Auto-generated method stub
-
-
-                                    Log.d("System out", "onMarkerDragStart..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
-                                }
-
-                                @SuppressWarnings("unchecked")
-                                @Override
-                                public void onMarkerDragEnd(Marker arg0) {
-                                    // TODO Auto-generated method stub
-                                    Log.d("System out", "onMarkerDragEnd..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
-                                    double dest_lattitude = arg0.getPosition().latitude;
-                                    double dest_longitude = arg0.getPosition().longitude;
-                                    destination = new LatLng(dest_lattitude, dest_longitude);
-                                    mMap.animateCamera(CameraUpdateFactory.newLatLng(arg0.getPosition()));
-                                }
-
-                                @Override
-                                public void onMarkerDrag(Marker arg0) {
-                                    // TODO Auto-generated method stub
-                                    Log.i("System out", "onMarkerDrag...");
-                                }
-                            });
-
-
-                            setLocationMarker(destination.latitude, destination.longitude, 2);
-                           b1.setVisibility(View.VISIBLE);
-                            b2.setVisibility(View.VISIBLE);
-                            b3.setVisibility(View.VISIBLE);
-                            b4.setVisibility(View.VISIBLE);
-
+                            Log.d("System out", "onMarkerDragStart..." + arg0.getPosition().latitude + "..." + arg0.getPosition().longitude);
                         }
-                        else
-                        {
-                            Toast.makeText(getApplicationContext(), "Please Navigate to Current Location", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
 
+                        @SuppressWarnings("unchecked")
+                        @Override
+                        public void onMarkerDragEnd(Marker arg0) {
+                            // TODO Auto-generated method stub
+                            Log.d("System out", "onMarkerDragEnd..." + arg0.getPosition().latitude + "..." + arg0.getPosition().longitude);
+                            double dest_lattitude = arg0.getPosition().latitude;
+                            double dest_longitude = arg0.getPosition().longitude;
+                            destination = new LatLng(dest_lattitude, dest_longitude);
+                            mMap.animateCamera(CameraUpdateFactory.newLatLng(arg0.getPosition()));
                         }
+
+                        @Override
+                        public void onMarkerDrag(Marker arg0) {
+                            // TODO Auto-generated method stub
+                            Log.i("System out", "onMarkerDrag...");
+                        }
+                    });
+
+
+                    setLocationMarker(destination.latitude, destination.longitude, 2);
+                    b1.setVisibility(View.VISIBLE);
+                    b2.setVisibility(View.VISIBLE);
+                    b3.setVisibility(View.VISIBLE);
+                    b4.setVisibility(View.VISIBLE);
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please Navigate to Current Location", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
+                }
 
 
               /* String url = getDirectionsUrl(destloc , destlocation);
@@ -345,17 +355,14 @@ public class MainActivity extends AppCompatActivity
                 downloadTask.execute(url);*/
 
 
-                    }
+            }
 
-                    @Override
-                    public void onError(Status status) {
-                        // TODO: Handle the error.
-                        //  Log.i(TAG, "An error occurred: " + status);
-                    }
-                });
-
-
-
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                //  Log.i(TAG, "An error occurred: " + status);
+            }
+        });
 
 
         /** Listener for click event of the button */
@@ -364,7 +371,6 @@ public class MainActivity extends AppCompatActivity
                 showDialog(TIME_DIALOG_START);
             }
         });
-
 
 
         end_btn.setOnClickListener(new View.OnClickListener() {
@@ -378,12 +384,11 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        adapters = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,options);
+        adapters = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, options);
         spinner.setAdapter(adapters);
 
-        show_cars = (Button)findViewById(R.id.show_cars);
+        show_cars = (Button) findViewById(R.id.show_cars);
         show_cars.setVisibility(View.INVISIBLE);
-
 
 
         dropdownQueue = Volley.newRequestQueue(this);
@@ -401,8 +406,8 @@ public class MainActivity extends AppCompatActivity
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if (jsonObject.names().get(0).equals("success")) {
-                                int i=0;
-                                while(!jsonObject.getString(String.valueOf(i)).equals("end")){
+                                int i = 0;
+                                while (!jsonObject.getString(String.valueOf(i)).equals("end")) {
 
                                     options.add(jsonObject.getString(String.valueOf(i)));
                                     //Toast.makeText(getApplicationContext(), jsonObject.getString(String.valueOf(i)), Toast.LENGTH_SHORT).show();
@@ -432,7 +437,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         HashMap<String, String> hashMap = new HashMap<String, String>();
-                        hashMap.put("id",session.getuserId());
+                        hashMap.put("id", session.getuserId());
                         //  hashMap.put("id", session.getuserId());
                         //  Toast.makeText(getApplicationContext(), "Successfull", Toast.LENGTH_SHORT).show();
                         //fab.setEnabled(false);
@@ -455,7 +460,7 @@ public class MainActivity extends AppCompatActivity
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                 car_selected = parent.getItemAtPosition(position).toString();
+                car_selected = parent.getItemAtPosition(position).toString();
             }
 
             @Override
@@ -463,11 +468,6 @@ public class MainActivity extends AppCompatActivity
                 //Another interface callback
             }
         });
-
-
-
-
-
 
 
         /** Get the current time */
@@ -479,11 +479,14 @@ public class MainActivity extends AppCompatActivity
         eMinute = cal.get(Calendar.MINUTE);
         updateDisplayEnd();
 
+        start_time_park = new StringBuilder()
+                .append(pad(sHour)).append(":")
+                .append(pad(sMinute));
+        end_time_park = new StringBuilder()
+                .append(pad(eHour)).append(":")
+                .append(pad(eMinute));
+
         /** Display the current time in the TextView */
-
-
-
-
 
 
         requestQueue = Volley.newRequestQueue(this);
@@ -566,6 +569,9 @@ public class MainActivity extends AppCompatActivity
                         hashMap.put("dest_long", String.valueOf(destination.longitude));
                         hashMap.put("id", session.getuserId());
                         hashMap.put("car_no", car_selected);
+                        hashMap.put("start_time",start_time_park.toString());
+                        hashMap.put("end_time",end_time_park.toString());
+
 
 
                         //fab.setEnabled(false);
@@ -602,7 +608,7 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
 
 
-        } else if(!session.getusername().isEmpty()) {
+        } else if (!session.getusername().isEmpty()) {
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setTitle("Parking Allocation")
@@ -618,7 +624,6 @@ public class MainActivity extends AppCompatActivity
                     .setNegativeButton("No", null)
                     .show();
         }
-
 
 
     }
@@ -666,10 +671,9 @@ public class MainActivity extends AppCompatActivity
             startActivity(i);
 
 
-        }
-        else if (id == R.id.nav_Payments) {
+        } else if (id == R.id.nav_Payments) {
 
-        }else if (id == R.id.nav_Logout) {
+        } else if (id == R.id.nav_Logout) {
 
 
             session.destroySession();
@@ -705,9 +709,7 @@ public class MainActivity extends AppCompatActivity
             if (isEmpty(body)) {
                 intent.putExtra(EXTRA_TEXT, body);
             }
-            startActivity(Intent.createChooser(intent,"Sending"));
-
-
+            startActivity(Intent.createChooser(intent, "Sending"));
 
 
         } else if (id == R.id.nav_Support) {
@@ -732,11 +734,10 @@ public class MainActivity extends AppCompatActivity
                 // Perform action on click
                 onMyLocationButtonClick();
                 enableMyLocation();
-                location_enabled=true;
+                location_enabled = true;
 
             }
         });
-
 
 
 //
@@ -799,14 +800,14 @@ public class MainActivity extends AppCompatActivity
                     // TODO Auto-generated method stub
 
 
-                    Log.d("System out", "onMarkerDragStart..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
+                    Log.d("System out", "onMarkerDragStart..." + arg0.getPosition().latitude + "..." + arg0.getPosition().longitude);
                 }
 
                 @SuppressWarnings("unchecked")
                 @Override
                 public void onMarkerDragEnd(Marker arg0) {
                     // TODO Auto-generated method stub
-                    Log.d("System out", "onMarkerDragEnd..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
+                    Log.d("System out", "onMarkerDragEnd..." + arg0.getPosition().latitude + "..." + arg0.getPosition().longitude);
                     double src_lattitude = arg0.getPosition().latitude;
                     double src_longitude = arg0.getPosition().longitude;
                     srclocation = new LatLng(src_lattitude, src_longitude);
@@ -819,8 +820,7 @@ public class MainActivity extends AppCompatActivity
                     Log.i("System out", "onMarkerDrag...");
                 }
             });
-            location_enabled= true;
-
+            location_enabled = true;
 
 
             // Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
