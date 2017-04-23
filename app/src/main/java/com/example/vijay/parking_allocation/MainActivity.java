@@ -153,6 +153,18 @@ public class MainActivity extends AppCompatActivity
                     sHour = hourOfDay;
                     sMinute = minute;
                     updateDisplay();
+
+                    displayToast();
+                }
+            };
+
+    private TimePickerDialog.OnTimeSetListener mTimeSetListener_end =
+            new TimePickerDialog.OnTimeSetListener() {
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                    eHour = hourOfDay;
+                    eMinute = minute;
+                    updateDisplayEnd();
+
                     displayToast();
                 }
             };
@@ -161,23 +173,19 @@ public class MainActivity extends AppCompatActivity
      * Updates the time in the TextView
      */
     private void updateDisplay() {
-        start_time.setText(
-                new StringBuilder()
-                        .append(pad(sHour)).append(":")
-                        .append(pad(sMinute)));
         start_time_park = new StringBuilder()
                 .append(pad(sHour)).append(":")
                 .append(pad(sMinute));
+        start_time.setText(start_time_park);
+
     }
 
     private void updateDisplayEnd() {
-        end_time.setText(
-                new StringBuilder()
-                        .append(pad(eHour)).append(":")
-                        .append(pad(eMinute)));
         end_time_park = new StringBuilder()
                 .append(pad(eHour)).append(":")
                 .append(pad(eMinute));
+        end_time.setText(end_time_park);
+
     }
 
     private void displayToast() {
@@ -596,7 +604,7 @@ public class MainActivity extends AppCompatActivity
                         mTimeSetListener, sHour, sMinute, false);
             case TIME_DIALOG_END:
                 return new TimePickerDialog(this,
-                        mTimeSetListener, eHour, eMinute, false);
+                        mTimeSetListener_end, eHour, eMinute, false);
         }
         return null;
     }
