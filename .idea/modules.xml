@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Parking_allocation.iml" filepath="$PROJECT_DIR$/Parking_allocation.iml" />
       <module fileurl="file://$PROJECT_DIR$/Parking_allocation1.2.3.iml" filepath="$PROJECT_DIR$/Parking_allocation1.2.3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Parking_allocation_Test.iml" filepath="$PROJECT_DIR$/Parking_allocation_Test.iml" />
       <module fileurl="file://$PROJECT_DIR$/Parking_allocation_f.iml" filepath="$PROJECT_DIR$/Parking_allocation_f.iml" />
       <module fileurl="file://$PROJECT_DIR$/Parking_allocation_final_final.iml" filepath="$PROJECT_DIR$/Parking_allocation_final_final.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
