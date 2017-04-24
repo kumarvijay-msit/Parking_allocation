@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:background="@drawable/detailsbackground"
     tools:context="com.example.vijay.parking_allocation.car_details.CarDetails">
 
     <LinearLayout
@@ -17,7 +17,10 @@
             android:id="@+id/add_car"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="       Add Car       "
+            android:text="         Add Car           "
+            android:background="#32706B"
+            android:textColor="#fff"/>
+
            />
 
         <Button
@@ -26,13 +29,17 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="    Delete Car    " />
+            android:text="       Delete Car       "
+            android:background="#1F4542"
+            android:textColor="#fff"/>
 
         <Button
             android:id="@+id/show_car"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Show Car List " />
+            android:text="    Show Car List    "
+            android:background="#41918B"
+            android:textColor="#fff"/>
 
 
     </LinearLayout>

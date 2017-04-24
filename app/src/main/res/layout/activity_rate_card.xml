@@ -1,68 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ratecardbackground">
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
-
+    android:gravity="center"
+   android:padding="20dp"
+    android:layout_marginTop="70dp">
     <TableRow
-        android:background="#607D8B"
-        android:padding="10dp">
+        android:background="#42948E"
+
+        android:padding="40dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Time" />
+            android:text="Time"
+            android:textColor="#fff"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Four-Wheelers" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Two Wheelers" />
+            android:text="Rate Per Hour"
+            android:textColor="#fff"/>
+
     </TableRow>
+    <TableRow
+        android:padding="10dp"/>
 
     <TableRow
-        android:background="#ECEFF1"
-        android:padding="15dp">
+        android:background="#01274A"
+        android:padding="30dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Upto 1 Hour" />
+            android:text="Upto 1 Hour"
+            android:textColor="#fff"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text=" ₹ 30 " />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="₹ 20" />
+            android:text=" ₹ 30 "
+            android:textColor="#fff"/>
+
     </TableRow>
+<TableRow
+    android:padding="10dp"/>
 
     <TableRow
-        android:background="#ECEFF1"
-        android:padding="15dp"
+        android:background="#01274A"
+        android:padding="30dp"
         >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="After 1 Hour" />
+            android:text="After 1 Hour"
+            android:textColor="#fff"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="₹ 50" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="₹ 30" />
+            android:text="₹ 50"
+            android:textColor="#fff"/>
+
     </TableRow>
 
 </TableLayout>
+    </RelativeLayout>
