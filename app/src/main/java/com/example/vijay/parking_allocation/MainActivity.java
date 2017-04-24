@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity
     GoogleApiClient mGoogleApiClient;
     double longitude;
     double latitude;
+    final static int TIME_PICKER_INTERVAL = 60;
     private boolean mPermissionDenied = false;
     private static GoogleMap mMap;
     private View b_get;
@@ -129,11 +130,11 @@ public class MainActivity extends AppCompatActivity
     String name;
     TextView t;
     FloatingActionButton imgMyLocation;
-    View b1, b2, b3, b4;
+    View b1, b2, b3, b4,b5;
     ArrayAdapter<String> adapter;
 
     private TextView start_time, end_time;
-    private Button start_btn, end_btn;
+    private Button start_btn, end_btn,proceed;
 
     String car_selected;
 
@@ -154,7 +155,7 @@ public class MainActivity extends AppCompatActivity
                     sMinute = minute;
                     updateDisplay();
 
-                    displayToast();
+                  //  displayToast();
                 }
             };
 
@@ -165,7 +166,7 @@ public class MainActivity extends AppCompatActivity
                     eMinute = minute;
                     updateDisplayEnd();
 
-                    displayToast();
+                    //displayToast();
                 }
             };
 
@@ -176,7 +177,7 @@ public class MainActivity extends AppCompatActivity
         start_time_park = new StringBuilder()
                 .append(pad(sHour)).append(":")
                 .append(pad(sMinute));
-        start_time.setText(start_time_park);
+        start_time.setText(String.valueOf(sHour));
 
     }
 
@@ -184,14 +185,17 @@ public class MainActivity extends AppCompatActivity
         end_time_park = new StringBuilder()
                 .append(pad(eHour)).append(":")
                 .append(pad(eMinute));
-        end_time.setText(end_time_park);
+        int time = (eHour > 0 ? eHour +1 : eHour);
+        String hour = String.valueOf(time);
+        end_time.setText(hour);
+     //   Toast.makeText(this, new StringBuilder().append("Time choosen is ").append(end_time.getText()), Toast.LENGTH_SHORT).show();
 
     }
 
-    private void displayToast() {
+   /* private void displayToast() {
         Toast.makeText(this, new StringBuilder().append("Time choosen is ").append(start_time.getText()), Toast.LENGTH_SHORT).show();
 
-    }
+    }*/
 
     /**
      * Add padding to numbers less than ten
@@ -237,6 +241,8 @@ public class MainActivity extends AppCompatActivity
         end_time = (TextView) findViewById(R.id.End_time);
         end_btn = (Button) findViewById(R.id.End_btn);
 
+        proceed = (Button) findViewById(R.id.proceed);
+
 
         b1 = findViewById(R.id.Start_btn);
         b1.setVisibility(View.GONE);
@@ -249,6 +255,12 @@ public class MainActivity extends AppCompatActivity
 
         b4 = findViewById(R.id.End_btn);
         b4.setVisibility(View.GONE);
+
+        b5 = findViewById(R.id.proceed);
+        b5.setVisibility(View.GONE);
+
+
+
 
         spinner = (Spinner) findViewById(R.id.car_spinner);
         spinner.setVisibility(View.GONE);
@@ -362,6 +374,8 @@ public class MainActivity extends AppCompatActivity
                     b2.setVisibility(View.VISIBLE);
                     b3.setVisibility(View.VISIBLE);
                     b4.setVisibility(View.VISIBLE);
+                    b5.setVisibility(View.VISIBLE);
+
 
                 } else {
                     Toast.makeText(getApplicationContext(), "Please Navigate to Current Location", Toast.LENGTH_LONG).show();
@@ -397,13 +411,26 @@ public class MainActivity extends AppCompatActivity
         end_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 showDialog(TIME_DIALOG_END);
+
+
+            }
+        });
+
+        proceed.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 show_cars.setVisibility(View.VISIBLE);
                 b1.setVisibility(View.INVISIBLE);
                 b2.setVisibility(View.INVISIBLE);
                 b3.setVisibility(View.INVISIBLE);
                 b4.setVisibility(View.INVISIBLE);
+                b5.setVisibility(View.INVISIBLE);
+
+
             }
         });
+
+
+
 
         adapters = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, options);
         spinner.setAdapter(adapters);
@@ -418,6 +445,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 spinner.setVisibility(View.VISIBLE);
+                findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
 
 
                 // Add new Items to List
@@ -437,6 +465,7 @@ public class MainActivity extends AppCompatActivity
 
                                 }
                                 adapters.notifyDataSetChanged();
+                                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                                 // Toast.makeText(getApplicationContext(), jsonObject.getString("0"), Toast.LENGTH_SHORT).show();
 
                             } else {
@@ -555,6 +584,7 @@ public class MainActivity extends AppCompatActivity
                                 b2.setVisibility(View.GONE);
                                 b3.setVisibility(View.GONE);
                                 b4.setVisibility(View.GONE);
+                                b5.setVisibility(View.GONE);
                                 spinner.setVisibility(View.GONE);
 
                                /* setLocationMarker(22.5145,88.4033,3);
@@ -617,7 +647,7 @@ public class MainActivity extends AppCompatActivity
                         mTimeSetListener, sHour, sMinute, false);
             case TIME_DIALOG_END:
                 return new TimePickerDialog(this,
-                        mTimeSetListener_end, eHour, eMinute, false);
+                        mTimeSetListener_end, eHour, eMinute , false);
         }
         return null;
     }
