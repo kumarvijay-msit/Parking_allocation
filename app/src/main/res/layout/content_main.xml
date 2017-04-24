@@ -31,6 +31,7 @@
 
             app:backgroundTint="#ffffff" />
 
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/imgMyLocation"
             android:layout_width="50dp"
@@ -49,7 +50,7 @@
         android:id="@+id/place_autocomplete_fragment"
         android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="60dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="80dp"

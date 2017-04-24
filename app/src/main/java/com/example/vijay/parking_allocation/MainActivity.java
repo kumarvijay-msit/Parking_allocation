@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity
 
     ArrayList<String> options = new ArrayList<String>();
     ArrayAdapter<String> adapters;
+    PlaceAutocompleteFragment autocompleteFragment;
 
     StringBuilder start_time_park,end_time_park;
 
@@ -302,9 +303,11 @@ public class MainActivity extends AppCompatActivity
         } else
             sFm.beginTransaction().show(sMapFragment).commit();
 
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+         autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.getView().setBackgroundColor(Color.WHITE);
+
+        autocompleteFragment.setMenuVisibility(false);
 
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -321,7 +324,7 @@ public class MainActivity extends AppCompatActivity
                 if (location_enabled == true) {
 
 
-                    fab.setEnabled(true);
+                        fab.setEnabled(true);
 
                     setLocationMarker(srclocation.latitude, srclocation.longitude, 1);
                     destination = destlocation;
@@ -756,6 +759,7 @@ public class MainActivity extends AppCompatActivity
                 onMyLocationButtonClick();
                 enableMyLocation();
                 location_enabled = true;
+                autocompleteFragment.setMenuVisibility(true);
 
             }
         });
