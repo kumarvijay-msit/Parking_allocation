@@ -128,13 +128,13 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout drawer;
     SessionHandel session;
     String name;
-    TextView t;
+    TextView t,time_message;
     FloatingActionButton imgMyLocation;
-    View b1, b2, b3, b4;
+    View b1, b2, b3, b4,b5,b6;
     ArrayAdapter<String> adapter;
 
     private TextView start_time, end_time;
-    private Button start_btn, end_btn;
+    private Button start_btn, end_btn,proceed;
 
     String car_selected;
 
@@ -186,6 +186,8 @@ public class MainActivity extends AppCompatActivity
                 .append(pad(eHour)).append(":")
                 .append(pad(eMinute));
         end_time.setText(end_time_park);
+
+        time_message.setText("TIME SLOT ALLOTED "+start_time.getText()+" - "+end_time.getText());
 
     }
 
@@ -251,14 +253,30 @@ public class MainActivity extends AppCompatActivity
         b4 = findViewById(R.id.End_btn);
         b4.setVisibility(View.GONE);
 
+        b5 = findViewById(R.id.reset);
+        b5.setVisibility(View.GONE);
+
+        b6 = findViewById(R.id.cancel_trip);
+        b6.setVisibility(View.GONE);
+
+        proceed = (Button)findViewById(R.id.proceed);
+        proceed.setVisibility(View.INVISIBLE);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setVisibility(View.INVISIBLE);
+
         spinner = (Spinner) findViewById(R.id.car_spinner);
         spinner.setVisibility(View.GONE);
+
+        time_message = (TextView)findViewById(R.id.time_message);
+        time_message.setVisibility(View.INVISIBLE);
 
 
         findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
         ImageView imgv = (ImageView) findViewById(R.id.imageView1);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
 
 
 
@@ -365,6 +383,9 @@ public class MainActivity extends AppCompatActivity
                     b2.setVisibility(View.VISIBLE);
                     b3.setVisibility(View.VISIBLE);
                     b4.setVisibility(View.VISIBLE);
+                    b5.setVisibility(View.VISIBLE);
+                    time_message.setVisibility(View.VISIBLE);
+                    proceed.setVisibility(View.VISIBLE);
 
                 } else {
                     Toast.makeText(getApplicationContext(), "Please Navigate to Current Location", Toast.LENGTH_LONG).show();
@@ -400,11 +421,47 @@ public class MainActivity extends AppCompatActivity
         end_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 showDialog(TIME_DIALOG_END);
-                show_cars.setVisibility(View.VISIBLE);
+
+
+
+            }
+        });
+
+        b6.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
+
+
+            }
+        });
+
+        b5.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+               time_message.setText("");
+                end_time.setText("");
+                start_time.setText("");
+
+
+
+            }
+        });
+
+
+
+        proceed.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+
+
                 b1.setVisibility(View.INVISIBLE);
                 b2.setVisibility(View.INVISIBLE);
                 b3.setVisibility(View.INVISIBLE);
                 b4.setVisibility(View.INVISIBLE);
+                b5.setVisibility(View.INVISIBLE);
+                show_cars.setVisibility(View.VISIBLE);
+                proceed.setVisibility(View.INVISIBLE);
+
             }
         });
 
@@ -485,6 +542,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 car_selected = parent.getItemAtPosition(position).toString();
+                fab.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -498,10 +556,10 @@ public class MainActivity extends AppCompatActivity
         final Calendar cal = Calendar.getInstance();
         sHour = cal.get(Calendar.HOUR_OF_DAY);
         sMinute = cal.get(Calendar.MINUTE);
-        updateDisplay();
+        //updateDisplay();
         eHour = cal.get(Calendar.HOUR_OF_DAY);
         eMinute = cal.get(Calendar.MINUTE);
-        updateDisplayEnd();
+       // updateDisplayEnd();
 
         start_time_park = new StringBuilder()
                 .append(pad(sHour)).append(":")
@@ -516,7 +574,7 @@ public class MainActivity extends AppCompatActivity
         requestQueue = Volley.newRequestQueue(this);
 
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+
 
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -559,6 +617,8 @@ public class MainActivity extends AppCompatActivity
                                 b3.setVisibility(View.GONE);
                                 b4.setVisibility(View.GONE);
                                 spinner.setVisibility(View.GONE);
+                                b5.setVisibility(View.INVISIBLE);
+                                b6.setVisibility(View.VISIBLE);
 
                                /* setLocationMarker(22.5145,88.4033,3);
                                 destloc = new LatLng(22.5145,88.4033);
