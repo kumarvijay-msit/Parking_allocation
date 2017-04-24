@@ -1,4 +1,4 @@
-package com.example.vijay.parking_allocation;
+package com.example.vijay.parking_allocation.user;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -19,6 +19,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.vijay.parking_allocation.MainActivity;
+import com.example.vijay.parking_allocation.R;
+import com.example.vijay.parking_allocation.SessionHandel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +39,7 @@ public class Login extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "MESSAGE";
     String message = "";
     private SessionHandel session;//global variable
+    String user_id = "";
 
 
     @Override
@@ -73,11 +77,13 @@ public class Login extends AppCompatActivity {
                             if(jsonObject.names().get(0).equals("success")){
                                 Toast.makeText(getApplicationContext(),jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
                                 message = jsonObject.getString("user_id");
-
+                                user_id = jsonObject.getString("id");
                                 session.setusername(message);
-                               // Toast.makeText(getApplicationContext(),session.getusername(), Toast.LENGTH_SHORT).show();
+                                session.setuserId(user_id);
+                               //Toast.makeText(getApplicationContext(),session.getusername(), Toast.LENGTH_SHORT).show();
 
                                 startActivity(new Intent(getApplicationContext(),MainActivity.class).putExtra(EXTRA_MESSAGE, message));
+                                finish();
 
                             }
                             else {
@@ -120,6 +126,7 @@ public class Login extends AppCompatActivity {
             {
                 Intent it = new Intent(Login.this, Signup.class);
                 startActivity(it);
+                finish();
             }
         });
     }
@@ -130,6 +137,7 @@ public class Login extends AppCompatActivity {
         if(!session.getusername().isEmpty())
         {
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
+            finish();
 
         }else {
 

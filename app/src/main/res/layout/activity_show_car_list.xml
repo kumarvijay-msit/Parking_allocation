@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginTop="25dp">
+    <Button
+        android:id="@+id/show_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="true"
+        android:text="SHOW AVAILABLE CARS"
+        android:background="#17615D"
+        android:textColor="#fff"/>
+
+    <ListView
+        android:id="@+id/list_item"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:drawSelectorOnTop="false"
+        android:background="@drawable/deletecar"
+        />
+</LinearLayout>

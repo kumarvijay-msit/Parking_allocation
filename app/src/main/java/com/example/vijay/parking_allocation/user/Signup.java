@@ -1,4 +1,4 @@
-package com.example.vijay.parking_allocation;
+package com.example.vijay.parking_allocation.user;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -17,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.vijay.parking_allocation.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,8 +47,10 @@ public class Signup extends AppCompatActivity {
         login = (TextView)findViewById(R.id.logiin);
         signup = (Button) findViewById(R.id.sup);
 
+
         Typeface custom_font = Typeface.createFromAsset(getAssets(),"fonts/Lato-Light.ttf");
         signup.setTypeface(custom_font);
+
         mail.setTypeface(custom_font);
         mobphone.setTypeface(custom_font);
         passwordd.setTypeface(custom_font);
@@ -89,6 +92,7 @@ public class Signup extends AppCompatActivity {
                         hashMap.put("username",usrusr.getText().toString());
                         hashMap.put("password",passwordd.getText().toString());
                         hashMap.put("mob_no",mobphone.getText().toString() );
+
                         return hashMap;
                     }
                 };

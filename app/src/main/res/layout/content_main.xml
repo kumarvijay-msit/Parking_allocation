@@ -78,6 +78,63 @@
             android:indeterminate="true"
             android:theme="@style/CircularProgress" />
     </RelativeLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="470dp"
+        android:layout_marginLeft="30dp">
+        <TextView android:id="@+id/Start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Time"
+            android:textSize="20sp"/>
+        <Button android:id="@+id/Start_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="START"/>
+    </LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="470dp"
+        android:layout_marginLeft="30dp">
+
+        <Button android:id="@+id/show_cars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SELECT CAR TO PROCEED"/>
+    </LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#ffffff"
+        android:layout_marginTop="470dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp">
+        <Spinner
+            android:id="@+id/car_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="470dp"
+        android:layout_marginLeft="270dp">
+        <TextView android:id="@+id/End_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Time"
+            android:textSize="20sp"/>
+        <Button android:id="@+id/End_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="END"/>
+    </LinearLayout>
 
 
 </RelativeLayout>

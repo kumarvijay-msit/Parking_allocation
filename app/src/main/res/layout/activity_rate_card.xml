@@ -1,18 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.vijay.parking_allocation.RateCard">
+    android:background="@drawable/ratecardbackground">
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+   android:padding="20dp"
+    android:layout_marginTop="70dp">
+    <TableRow
+        android:background="#42948E"
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:padding="40dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Time"
+            android:textColor="#fff"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Rate Per Hour"
+            android:textColor="#fff"/>
 
-        android:background="@android:color/black"
+    </TableRow>
+    <TableRow
+        android:padding="10dp"/>
 
-        android:src="@drawable/rate" />
+    <TableRow
+        android:background="#01274A"
+        android:padding="30dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Upto 1 Hour"
+            android:textColor="#fff"/>
 
-</android.support.constraint.ConstraintLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=" ₹ 30 "
+            android:textColor="#fff"/>
+
+    </TableRow>
+<TableRow
+    android:padding="10dp"/>
+
+    <TableRow
+        android:background="#01274A"
+        android:padding="30dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="After 1 Hour"
+            android:textColor="#fff"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="₹ 50"
+            android:textColor="#fff"/>
+
+    </TableRow>
+
+</TableLayout>
+    </RelativeLayout>

@@ -1,6 +1,5 @@
 package com.example.vijay.parking_allocation;
 
-import android.*;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;

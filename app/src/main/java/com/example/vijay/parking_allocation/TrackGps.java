@@ -15,12 +15,6 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import static com.example.vijay.parking_allocation.R.id.map;
-
 /**
  * Created by Vijay on 20-03-2017.
  */
