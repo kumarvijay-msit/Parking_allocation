@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity
     Marker myMarkersrc = null, myMarkerDest = null, myparking = null;
     DrawerLayout drawer;
     SessionHandel session;
-    String name = null;
+    String name;
     TextView t;
     FloatingActionButton imgMyLocation;
     View b1, b2, b3, b4;
@@ -228,6 +228,10 @@ public class MainActivity extends AppCompatActivity
         sMapFragment = SupportMapFragment.newInstance();
         setContentView(R.layout.activity_main);
 
+        session = new SessionHandel(this);
+
+
+
         start_time = (TextView) findViewById(R.id.Start_time);
         start_btn = (Button) findViewById(R.id.Start_btn);
         end_time = (TextView) findViewById(R.id.End_time);
@@ -255,7 +259,9 @@ public class MainActivity extends AppCompatActivity
         ImageView imgv = (ImageView) findViewById(R.id.imageView1);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        session = new SessionHandel(getApplicationContext());
+
+
+
         name = session.getusername();
 
         //t = (TextView)findViewById(R.id.user_name);
@@ -266,6 +272,7 @@ public class MainActivity extends AppCompatActivity
         }
 
 
+
         imgv.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
@@ -274,12 +281,18 @@ public class MainActivity extends AppCompatActivity
                     name = "Welcome Guest";
                 t.setText(name);
                 drawer.openDrawer(Gravity.START);
+
+
             }
         });
 
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header=navigationView.getHeaderView(0);
+        TextView t1 = (TextView)header.findViewById(R.id.user_name);
+        t1.setText(session.getusername());
+
+
         sMapFragment.getMapAsync(this);
 
 
