@@ -5,6 +5,14 @@
     android:layout_height="match_parent"
     android:background="@drawable/detailsbackground"
     tools:context="com.example.vijay.parking_allocation.car_details.CarDetails">
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="40dp"
+        android:clickable="true"
+        android:src="@drawable/ic_arrow_back_white_24dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
