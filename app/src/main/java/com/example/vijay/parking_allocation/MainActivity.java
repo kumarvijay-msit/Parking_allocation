@@ -4,6 +4,7 @@ package com.example.vijay.parking_allocation;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -303,12 +304,15 @@ public class MainActivity extends AppCompatActivity
         } else
             sFm.beginTransaction().show(sMapFragment).commit();
 
-         autocompleteFragment = (PlaceAutocompleteFragment)
+        autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.getView().setBackgroundColor(Color.WHITE);
 
         autocompleteFragment.setMenuVisibility(false);
 
+        //Code to Make the Search Fragment Invisible.
+        View frag = findViewById(R.id.place_autocomplete_fragment);
+        frag.setVisibility(View.GONE);
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
 
@@ -760,6 +764,9 @@ public class MainActivity extends AppCompatActivity
                 enableMyLocation();
                 location_enabled = true;
                 autocompleteFragment.setMenuVisibility(true);
+                //Code to Make the Search Fragment Visible.
+                View frag = findViewById(R.id.place_autocomplete_fragment);
+                frag.setVisibility(View.VISIBLE);
 
             }
         });
