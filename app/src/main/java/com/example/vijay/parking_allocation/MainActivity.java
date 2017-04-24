@@ -129,12 +129,12 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout drawer;
     SessionHandel session;
     String name;
-    TextView t,time_message;
+    TextView t,time_message,dest_message;
     FloatingActionButton imgMyLocation;
     View b1, b2, b3, b4,b5,b6;
     ArrayAdapter<String> adapter;
 
-    private TextView start_time, end_time;
+    private TextView start_time, end_time,current_loc_message;
     private Button start_btn, end_btn,proceed;
 
     String car_selected;
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity
                     sMinute = minute;
                     updateDisplay();
 
-                    displayToast();
+
                 }
             };
 
@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity
                     eMinute = minute;
                     updateDisplayEnd();
 
-                    displayToast();
+
                 }
             };
 
@@ -186,16 +186,18 @@ public class MainActivity extends AppCompatActivity
         end_time_park = new StringBuilder()
                 .append(pad(eHour)).append(":")
                 .append(pad(eMinute));
+        int hour = eHour>0?eHour+1:eHour;
+        String time = String.valueOf(hour);
         end_time.setText(end_time_park);
 
-        time_message.setText("TIME SLOT ALLOTED "+start_time.getText()+" - "+end_time.getText());
+        time_message.setText("TIME SLOT ALLOTED "+sHour+":00 hrs"+" - "+time+":00 hrs");
 
     }
 
-    private void displayToast() {
+   /* private void displayToast() {
         Toast.makeText(this, new StringBuilder().append("Time choosen is ").append(start_time.getText()), Toast.LENGTH_SHORT).show();
 
-    }
+    }*/
 
     /**
      * Add padding to numbers less than ten
@@ -272,6 +274,12 @@ public class MainActivity extends AppCompatActivity
         time_message = (TextView)findViewById(R.id.time_message);
         time_message.setVisibility(View.INVISIBLE);
 
+        current_loc_message = (TextView)findViewById(R.id.current_loc_message);
+        current_loc_message.setVisibility(View.VISIBLE);
+
+        dest_message = (TextView)findViewById(R.id.dest_message);
+        dest_message.setVisibility(View.INVISIBLE);
+
 
         findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
@@ -339,6 +347,7 @@ public class MainActivity extends AppCompatActivity
                 // TODO: Get info about the selected place.
                 //  Log.i(TAG, "Place: " + place.getName());
                 mMap.clear();
+                dest_message.setVisibility(View.INVISIBLE);
 
                 myMarkersrc.setDraggable(false);
                 LatLng destlocation = place.getLatLng();
@@ -595,7 +604,7 @@ public class MainActivity extends AppCompatActivity
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if (jsonObject.names().get(0).equals("success")) {
-                                Toast.makeText(getApplicationContext(), jsonObject.getString("success"), Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(getApplicationContext(), jsonObject.getString("success"), Toast.LENGTH_SHORT).show();
                                 parklat = Double.parseDouble(jsonObject.getString("lat"));
                                 parklong = Double.parseDouble(jsonObject.getString("long"));
                                 setLocationMarker(parklat, parklong, 3);
@@ -827,6 +836,8 @@ public class MainActivity extends AppCompatActivity
                 //Code to Make the Search Fragment Visible.
                 View frag = findViewById(R.id.place_autocomplete_fragment);
                 frag.setVisibility(View.VISIBLE);
+                current_loc_message.setVisibility(View.INVISIBLE);
+                dest_message.setVisibility(View.VISIBLE);
 
             }
         });
