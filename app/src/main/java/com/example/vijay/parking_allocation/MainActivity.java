@@ -333,7 +333,8 @@ public class MainActivity extends AppCompatActivity
         autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.getView().setBackgroundColor(Color.WHITE);
-        ((EditText)autocompleteFragment.getView().findViewById(R.id.place_autocomplete_search_input)).setText("Where To");
+        ((EditText)autocompleteFragment.getView().findViewById(R.id.place_autocomplete_search_input)).setHint("Where To");
+
 
         autocompleteFragment.setMenuVisibility(false);
 
@@ -691,10 +692,11 @@ public class MainActivity extends AppCompatActivity
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case TIME_DIALOG_START:
-                return new TimePickerDialog(this,
+                return new TimePickerDialog(this,R.style.DialogTheme,
                         mTimeSetListener, sHour, sMinute, false);
+
             case TIME_DIALOG_END:
-                return new TimePickerDialog(this,
+                return new TimePickerDialog(this,R.style.DialogTheme,
                         mTimeSetListener_end, eHour, eMinute, false);
         }
         return null;

@@ -55,7 +55,7 @@ public class Car_Details_Add extends AppCompatActivity {
         session = new SessionHandel(getApplicationContext());
 
         adapter=new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
+                R.layout.list_row,
                 listItems);
         listView = (ListView)findViewById(R.id.list_item);
         listView.setAdapter(adapter);
