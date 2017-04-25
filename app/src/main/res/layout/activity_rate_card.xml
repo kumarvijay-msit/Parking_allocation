@@ -12,7 +12,7 @@
         android:layout_marginTop="50dp"
         android:id="@+id/imgvw" />
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imageView1"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginLeft="10dp"
