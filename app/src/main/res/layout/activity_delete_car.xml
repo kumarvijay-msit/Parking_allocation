@@ -5,15 +5,17 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_marginTop="25dp"
-    android:background="#61D9CF">
+    android:background="#61D9CF"
+    >
     <Button
         android:id="@+id/btn_list"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="CLICK TO GET CAR LIST TO DELETE"
-        android:background="#17615D"
+        android:background="#1F4542"
         android:textColor="#fff"/>
+
 
     <ListView
         android:id="@+id/list_item"
@@ -21,7 +23,5 @@
         android:layout_height="fill_parent"
         android:drawSelectorOnTop="false"
         android:longClickable="true"
-        android:background="@drawable/deletecar"
-
-        />
+        android:background="@drawable/deletecar"/>
 </LinearLayout>

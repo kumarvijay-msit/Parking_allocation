@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/detailsbackground"
     tools:context="com.example.vijay.parking_allocation.car_details.CarDetails">
+
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="30dp"
@@ -13,6 +14,14 @@
         android:layout_marginTop="40dp"
         android:clickable="true"
         android:src="@drawable/ic_arrow_back_white_24dp" />
+
+    <ImageView
+        android:id="@+id/imgvw"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/ib" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,31 +34,31 @@
             android:id="@+id/add_car"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="         Add Car           "
             android:background="#32706B"
-            android:textColor="#fff"/>
+            android:text="         Add Car           "
+            android:textColor="#fff" />
 
-           />
+
 
         <Button
             android:id="@+id/del_car"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="       Delete Car       "
+            android:layout_marginTop="10dp"
             android:background="#1F4542"
-            android:textColor="#fff"/>
+            android:text="       Delete Car       "
+            android:textColor="#fff" />
 
         <Button
             android:id="@+id/show_car"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="    Show Car List    "
             android:background="#41918B"
-            android:textColor="#fff"/>
+            android:text="    Show Car List    "
+            android:textColor="#fff" />
 
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

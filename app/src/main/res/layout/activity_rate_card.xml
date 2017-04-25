@@ -5,13 +5,20 @@
     android:layout_height="match_parent"
     android:background="@drawable/ratecardbackground">
     <ImageView
-        android:id="@+id/imageView1"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/ib"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:id="@+id/imgvw" />
+    <ImageView
+        android:id="@+id/imageView2"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="40dp"
         android:clickable="true"
-        android:src="@drawable/ic_arrow_back_black_24dp" />
+        android:src="@drawable/ic_arrow_back_white_24dp" />
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

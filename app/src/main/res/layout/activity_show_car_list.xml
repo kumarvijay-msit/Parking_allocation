@@ -19,6 +19,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:drawSelectorOnTop="false"
-        android:background="@drawable/deletecar"
+        android:background="@drawable/showcar"
         />
 </LinearLayout>

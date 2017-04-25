@@ -5,7 +5,8 @@
     android:layout_marginTop="30dp"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#61D9CF">
+    android:background="#4a5166"
+    >
     <EditText
         android:id="@+id/edit1"
         android:layout_width="wrap_content"
@@ -24,6 +25,7 @@
         android:layout_height="fill_parent"
         android:drawSelectorOnTop="false"
         android:background="@drawable/addcar"
+
         />
     <RelativeLayout
         android:id="@+id/loadingPanel"

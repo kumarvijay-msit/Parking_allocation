@@ -339,6 +339,7 @@ public class MainActivity extends AppCompatActivity
 
         //Code to Make the Search Fragment Invisible.
         View frag = findViewById(R.id.place_autocomplete_fragment);
+
         frag.setVisibility(View.GONE);
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
