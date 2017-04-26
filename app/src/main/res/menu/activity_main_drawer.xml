@@ -12,8 +12,8 @@
             android:title="Rate Card " />
         <item
             android:id="@+id/nav_booking"
-            android:icon="@drawable/wallet"
-            android:title="Payments" />
+            android:icon="@drawable/booking_list"
+            android:title="My Bookings" />
         <item
             android:id="@+id/car_details"
             android:icon="@drawable/car"

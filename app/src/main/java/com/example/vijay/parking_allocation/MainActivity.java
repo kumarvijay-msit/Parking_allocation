@@ -7,12 +7,14 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +23,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -68,6 +71,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -457,6 +461,7 @@ public class MainActivity extends AppCompatActivity
 
         b6.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                b6.setEnabled(false);
 
                 cancel_Request = new StringRequest(Request.Method.POST, URL_CANCEL, new Response.Listener<String>() {
                     @Override
@@ -467,6 +472,8 @@ public class MainActivity extends AppCompatActivity
 
                                 Toast.makeText(getApplicationContext(), jsonObject.getString("success"), Toast.LENGTH_LONG).show();
                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
+                                finish();
 
                             } else {
                                 Toast.makeText(getApplicationContext(), jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
@@ -535,6 +542,9 @@ public class MainActivity extends AppCompatActivity
 
                 Intent it = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(it);
+                park_again.setEnabled(false);
+                finish();
+
 
 
 
@@ -673,7 +683,7 @@ public class MainActivity extends AppCompatActivity
                                 parklong = Double.parseDouble(jsonObject.getString("long"));
                                 String fare_detail = jsonObject.getString("bill");
 
-                                fare.setText("Your approximate fare is ₹ "+fare_detail);
+                                fare.setText("Your approximate fee is ₹ "+fare_detail);
 
                                 setLocationMarker(parklat, parklong, 3);
 
@@ -868,13 +878,41 @@ public class MainActivity extends AppCompatActivity
             Intent mailer = Intent.createChooser(intent, null);
             startActivity(mailer);*/
 
+            try {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/plain");
+                i.putExtra(Intent.EXTRA_SUBJECT, "GoPark");
+                String sAux = "\n Let me recommend this application to you!!!\n";
+                sAux = sAux + "https://play.google.com/store?hl=en \n";
+                i.putExtra(Intent.EXTRA_TEXT, sAux);
+                startActivity(Intent.createChooser(i, "choose one"));
+            } catch(Exception e) {
+                //e.toString();
+            }
+
+
+        } else if (id == R.id.nav_Support) {
+
+            File outputFile = new File(Environment.getExternalStorageDirectory(),
+                    "logcat.txt");
+            try {
+                Runtime.getRuntime().exec(
+                        "logcat -f " + outputFile.getAbsolutePath());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+
             Intent intent = new Intent(ACTION_SENDTO);
-            // intent.setType("text/plain");
             intent.setType("message/rfc822");
-            String mailTo = "kumarvijay2510@gmail.com";
+            String mailTo = "goparkmsit@gmail.com";
             String mailCC = "";
-            String subject = "Parking allocation app";
-            String body = "Link to parking allocation";
+            String subject = "GoPark Request for Support";
+            String phoneModel=getDeviceName();
+
+            String androidVer=Build.VERSION.RELEASE;
+            String body = "My phone model is "+phoneModel+" and I am using Android "+androidVer+".\nMy request is:\n\n\n";
             if (mailTo == null) {
                 mailTo = "";
             }
@@ -885,19 +923,49 @@ public class MainActivity extends AppCompatActivity
             if (!isEmpty(subject)) {
                 intent.putExtra(EXTRA_SUBJECT, subject);
             }
-            if (isEmpty(body)) {
+            if (!isEmpty(body)) {
                 intent.putExtra(EXTRA_TEXT, body);
             }
+            // the attachment
+            intent.putExtra(Intent.EXTRA_STREAM, outputFile.getAbsolutePath());
             startActivity(Intent.createChooser(intent, "Sending"));
-
-
-        } else if (id == R.id.nav_Support) {
 
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public static String getDeviceName() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        if (model.startsWith(manufacturer)) {
+            return capitalize(model);
+        }
+        return capitalize(manufacturer) + " " + model;
+    }
+
+    private static String capitalize(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return str;
+        }
+        char[] arr = str.toCharArray();
+        boolean capitalizeNext = true;
+
+        StringBuilder phrase = new StringBuilder();
+        for (char c : arr) {
+            if (capitalizeNext && Character.isLetter(c)) {
+                phrase.append(Character.toUpperCase(c));
+                capitalizeNext = false;
+                continue;
+            } else if (Character.isWhitespace(c)) {
+                capitalizeNext = true;
+            }
+            phrase.append(c);
+        }
+
+        return phrase.toString();
     }
 
     @Override
