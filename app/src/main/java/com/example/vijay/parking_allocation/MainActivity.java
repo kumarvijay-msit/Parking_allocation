@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity
         end_time_park = new StringBuilder()
                 .append(pad(eHour)).append(":")
                 .append(pad(eMinute));
-        int hour = eHour>0?eHour+1:eHour;
+        int hour = eMinute>0?eHour+1:eHour;
         String time = String.valueOf(hour);
         end_time.setText(end_time_park);
 
