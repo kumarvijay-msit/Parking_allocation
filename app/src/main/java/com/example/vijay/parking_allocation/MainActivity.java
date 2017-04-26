@@ -842,7 +842,13 @@ public class MainActivity extends AppCompatActivity
             startActivity(i);
 
 
-        } else if (id == R.id.nav_Payments) {
+        } else if (id == R.id.nav_booking) {
+
+            Intent i = new Intent(getApplicationContext(), Bookings.class);
+            startActivity(i);
+
+
+
 
         } else if (id == R.id.nav_Logout) {
 

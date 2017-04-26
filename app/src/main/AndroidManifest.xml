@@ -18,8 +18,8 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,20 +34,28 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyC9sFFMq4gt0XnNX50x7EJgN128nzdeVGw" />
 
-        <activity android:name=".user.Login"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".user.Signup"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".RateCard"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".car_details.Car_Details_Add"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".car_details.CarDetails"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".car_details.DeleteCar"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".car_details.ShowCarList"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".user.Login"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.Signup"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RateCard"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".car_details.Car_Details_Add"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".car_details.CarDetails"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".car_details.DeleteCar"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".car_details.ShowCarList"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Bookings"></activity>
     </application>
 
 </manifest>
