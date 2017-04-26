@@ -59,6 +59,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final String URL = "https://shayongupta.000webhostapp.com/booking/user_control.php";
-    private static final String URL_CAR_LIST = "https://shayongupta.000webhostapp.com/user_info/user_show_car.php";
+    private static final String URL_CANCEL = "https://shayongupta.000webhostapp.com/booking/cancel.php";
     private static final String URL_SHOW_CAR = "https://shayongupta.000webhostapp.com/user_info/user_show_car.php";
     SupportMapFragment sMapFragment;
     GoogleMap gMap;
@@ -107,8 +108,8 @@ public class MainActivity extends AppCompatActivity
     static LatLng srclocation;
     static LatLng destination;
     Button btn1, show_cars;
-    private RequestQueue requestQueue, dropdownQueue;
-    private StringRequest request, dropdownRequest;
+    private RequestQueue requestQueue, dropdownQueue,cancelQueue;
+    private StringRequest request, dropdownRequest,cancel_Request;
     Spinner spinner;
     String message;
     FloatingActionButton fab;
@@ -129,10 +130,11 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout drawer;
     SessionHandel session;
     String name;
-    TextView t,time_message,dest_message;
+    TextView t,time_message,dest_message,fare;
     FloatingActionButton imgMyLocation;
     View b1, b2, b3, b4,b5,b6;
     ArrayAdapter<String> adapter;
+    Button park_again;
 
     private TextView start_time, end_time,current_loc_message;
     private Button start_btn, end_btn,proceed;
@@ -248,6 +250,7 @@ public class MainActivity extends AppCompatActivity
         b1.setVisibility(View.GONE);
 
         b2 = findViewById(R.id.Start_time);
+
         b2.setVisibility(View.GONE);
 
         b3 = findViewById(R.id.End_time);
@@ -279,6 +282,12 @@ public class MainActivity extends AppCompatActivity
 
         dest_message = (TextView)findViewById(R.id.dest_message);
         dest_message.setVisibility(View.INVISIBLE);
+
+        fare = (TextView)findViewById(R.id.fare);
+        fare.setVisibility(View.INVISIBLE);
+
+        park_again = (Button)findViewById(R.id.park_again);
+        park_again.setVisibility(View.INVISIBLE);
 
 
         findViewById(R.id.loadingPanel).setVisibility(View.GONE);
@@ -333,7 +342,7 @@ public class MainActivity extends AppCompatActivity
         autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.getView().setBackgroundColor(Color.WHITE);
-        ((EditText)autocompleteFragment.getView().findViewById(R.id.place_autocomplete_search_input)).setHint("Where To");
+        ((EditText)autocompleteFragment.getView().findViewById(R.id.place_autocomplete_search_input)).setHint("Enter Destination Location");
 
 
         autocompleteFragment.setMenuVisibility(false);
@@ -443,11 +452,51 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        cancelQueue = Volley.newRequestQueue(this);
+
         b6.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
+                cancel_Request = new StringRequest(Request.Method.POST, URL_CANCEL, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.names().get(0).equals("success")) {
+
+                                Toast.makeText(getApplicationContext(), jsonObject.getString("success"), Toast.LENGTH_LONG).show();
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
+                            } else {
+                                Toast.makeText(getApplicationContext(), jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
 
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        HashMap<String, String> hashMap = new HashMap<String, String>();
+                        hashMap.put("cancel", session.getuserId());
+                        //  hashMap.put("id", session.getuserId());
+                        //  Toast.makeText(getApplicationContext(), "Successfull", Toast.LENGTH_SHORT).show();
+                        //fab.setEnabled(false);
+
+
+                        return hashMap;
+                    }
+                };
+
+                cancelQueue.add(cancel_Request);
 
             }
         });
@@ -480,8 +529,18 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+        park_again.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
 
-        adapters = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, options);
+                Intent it = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(it);
+
+
+
+            }
+        });
+
+        adapters = new ArrayAdapter<String>(this, R.layout.list_dropdown, options);
         spinner.setAdapter(adapters);
 
         show_cars = (Button) findViewById(R.id.show_cars);
@@ -598,6 +657,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
 
                 findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+                fare.setVisibility(View.VISIBLE);
 
                 //   Toast.makeText(getApplicationContext(),"gugugaga"+ name, Toast.LENGTH_SHORT).show();
 
@@ -610,8 +670,16 @@ public class MainActivity extends AppCompatActivity
                                // Toast.makeText(getApplicationContext(), jsonObject.getString("success"), Toast.LENGTH_SHORT).show();
                                 parklat = Double.parseDouble(jsonObject.getString("lat"));
                                 parklong = Double.parseDouble(jsonObject.getString("long"));
+                                String fare_detail = jsonObject.getString("bill");
+
+                                fare.setText("Your approximate fare is ₹ "+fare_detail);
+
                                 setLocationMarker(parklat, parklong, 3);
+
+
                                 parkloc = new LatLng(parklat, parklong);
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(parkloc, 13.0f));
+                             //   Toast.makeText(getApplicationContext(), jsonObject.getString("bill"), Toast.LENGTH_SHORT).show();
 
                                 String url = getDirectionsUrl(destination, parkloc);
 
@@ -635,6 +703,8 @@ public class MainActivity extends AppCompatActivity
                                 spinner.setVisibility(View.GONE);
                                 b5.setVisibility(View.INVISIBLE);
                                 b6.setVisibility(View.VISIBLE);
+                                park_again.setVisibility(View.VISIBLE);
+                               // fare.setText(fare_detail);
 
                                /* setLocationMarker(22.5145,88.4033,3);
                                 destloc = new LatLng(22.5145,88.4033);
@@ -828,6 +898,9 @@ public class MainActivity extends AppCompatActivity
         //map.clear();
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setMapToolbarEnabled(true);
+        boolean success = map.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                        this, R.raw.map));
         // mMap.setOnMyLocationButtonClickListener(this);
         FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.imgMyLocation);
         fab1.setOnClickListener(new View.OnClickListener() {
@@ -1007,7 +1080,7 @@ public class MainActivity extends AppCompatActivity
                 myparking = null;
             }
             myparking = mMap.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.fromResource(R.drawable.parking_marker)));
-        }
+                    }
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(current));
     }
