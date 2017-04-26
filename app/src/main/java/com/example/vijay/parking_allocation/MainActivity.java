@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity
     double parklat = 0.0;
     double parklong = 0.0;
     LatLng parkloc;
+    View frag;
 
     Marker myMarkersrc = null, myMarkerDest = null, myparking = null;
     DrawerLayout drawer;
@@ -348,7 +349,7 @@ public class MainActivity extends AppCompatActivity
         autocompleteFragment.setMenuVisibility(false);
 
         //Code to Make the Search Fragment Invisible.
-        View frag = findViewById(R.id.place_autocomplete_fragment);
+        frag = findViewById(R.id.place_autocomplete_fragment);
 
         frag.setVisibility(View.GONE);
 
@@ -704,6 +705,7 @@ public class MainActivity extends AppCompatActivity
                                 b5.setVisibility(View.INVISIBLE);
                                 b6.setVisibility(View.VISIBLE);
                                 park_again.setVisibility(View.VISIBLE);
+                                frag.setVisibility(View.INVISIBLE);
                                // fare.setText(fare_detail);
 
                                /* setLocationMarker(22.5145,88.4033,3);

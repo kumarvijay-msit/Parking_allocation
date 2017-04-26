@@ -43,7 +43,7 @@ public class Bookings extends AppCompatActivity {
         past_book_btn = (Button) findViewById(R.id.past_book_btn);
         lv = (ListView) findViewById(R.id.list_item);
         arr = new ArrayList<String>(Arrays.asList(language));
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arr);
+        adapter = new ArrayAdapter<String>(this, R.layout.list_row, arr);
         lv.setAdapter(adapter);
         session = new SessionHandel(getApplicationContext());
         requestQueue = Volley.newRequestQueue(this);

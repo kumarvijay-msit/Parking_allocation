@@ -11,12 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#17615D"
-        android:text="SHOW AVAILABLE CARS"
+        android:text="CLICK TO SEE ALL BOOKINGS"
         android:textAllCaps="true"
         android:textColor="#fff" />
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <ListView
             android:id="@+id/list_item"
