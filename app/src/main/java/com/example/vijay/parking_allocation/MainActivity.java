@@ -41,9 +41,11 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -697,6 +699,7 @@ public class MainActivity extends AppCompatActivity
 
                                 DownloadTask downloadTask = new DownloadTask();
 
+
                                 // Start downloading json data from Google Directions API
                                 downloadTask.execute(url);
 
@@ -762,6 +765,9 @@ public class MainActivity extends AppCompatActivity
                         return hashMap;
                     }
                 };
+                int socketTimeout = 5000;//30 seconds - change to what you want
+                RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                request.setRetryPolicy(policy);
 
                 requestQueue.add(request);
 
