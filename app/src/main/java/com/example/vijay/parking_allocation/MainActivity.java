@@ -7,7 +7,6 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
@@ -347,6 +346,8 @@ public class MainActivity extends AppCompatActivity
         autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.getView().setBackgroundColor(Color.WHITE);
+        ((EditText)autocompleteFragment.getView().findViewById(R.id.place_autocomplete_search_input)).setBackground(getDrawable(R.drawable.shadow_search));
+        ((View)autocompleteFragment.getView().findViewById(R.id.place_autocomplete_search_button)).setVisibility(View.GONE);
         ((EditText)autocompleteFragment.getView().findViewById(R.id.place_autocomplete_search_input)).setHint("Enter Destination Location");
 
 
