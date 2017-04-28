@@ -889,8 +889,8 @@ public class MainActivity extends AppCompatActivity
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("text/plain");
                 i.putExtra(Intent.EXTRA_SUBJECT, "GoPark");
-                String sAux = "\n Let me recommend this application to you!!!\n";
-                sAux = sAux + "https://play.google.com/store?hl=en \n";
+                String sAux = "\nLet me recommend GoPark to you!!!\n\n";
+                sAux = sAux + "https://www.dropbox.com/s/dj47hbi8845vffq/GoPark.apk?dl=0#\n";
                 i.putExtra(Intent.EXTRA_TEXT, sAux);
                 startActivity(Intent.createChooser(i, "choose one"));
             } catch(Exception e) {
@@ -919,7 +919,7 @@ public class MainActivity extends AppCompatActivity
             String phoneModel=getDeviceName();
 
             String androidVer=Build.VERSION.RELEASE;
-            String body = "My phone model is "+phoneModel+" and I am using Android "+androidVer+".\nMy request is:\n\n\n";
+            String body = "My phone model is "+phoneModel+" and I am using Android "+androidVer+".\n\nMy request is:\n\n\n";
             if (mailTo == null) {
                 mailTo = "";
             }
