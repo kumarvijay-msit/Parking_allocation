@@ -265,6 +265,25 @@
             android:background="@drawable/buttonshape_proceed"
             android:text="  Park Again  "/>
 
+        <Button android:id="@+id/economy_btn"
+
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:background="@drawable/buttonshape_100size"
+            android:text="Economy"
+            android:textColor="#ADD9D5"
+            android:layout_marginLeft="20dp"
+            />
+
+        <Button android:id="@+id/luxury_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Luxury"
+            android:background="@drawable/buttonshape_100size"
+            android:textColor="#ADD9D5"
+            android:layout_alignParentTop="true"
+            android:layout_alignEnd="@+id/park_again" />
+
 
 
 

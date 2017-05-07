@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity
     double parklong = 0.0;
     LatLng parkloc;
     View frag;
+    Byte preference = 0;
 
     Marker myMarkersrc = null, myMarkerDest = null, myparking = null;
     DrawerLayout drawer;
@@ -140,7 +141,7 @@ public class MainActivity extends AppCompatActivity
     FloatingActionButton imgMyLocation;
     View b1, b2, b3, b4,b5,b6;
     ArrayAdapter<String> adapter;
-    Button park_again;
+    Button park_again,luxury,economy;
 
     private TextView start_time, end_time,current_loc_message;
     private Button start_btn, end_btn,proceed;
@@ -243,6 +244,11 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         session = new SessionHandel(this);
+        luxury = (Button)findViewById(R.id.luxury_btn);
+        economy = (Button)findViewById(R.id.economy_btn);
+        luxury.setVisibility(View.GONE);
+        economy.setVisibility(View.GONE);
+
 
 
 
@@ -622,6 +628,7 @@ public class MainActivity extends AppCompatActivity
                 adapters.notifyDataSetChanged();
                 show_cars.setVisibility(View.INVISIBLE);
 
+
             }
 
 
@@ -632,11 +639,33 @@ public class MainActivity extends AppCompatActivity
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 car_selected = parent.getItemAtPosition(position).toString();
                 fab.setVisibility(View.VISIBLE);
+                time_message.setVisibility(View.INVISIBLE);
+                luxury.setVisibility(View.VISIBLE);
+                economy.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 //Another interface callback
+            }
+        });
+
+        luxury.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                luxury.setBackground(getResources().getDrawable(R.drawable.buttonshape_preference));
+                economy.setBackground(getResources().getDrawable(R.drawable.buttonshape_100size));
+                preference = 2;
+            }
+        });
+
+        economy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                economy.setBackground(getResources().getDrawable(R.drawable.buttonshape_preference));
+                luxury.setBackground(getResources().getDrawable(R.drawable.buttonshape_100size));
+                preference = 1;
+
             }
         });
 
@@ -670,7 +699,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
 
-                findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+                if (preference != 0){
+
+                    findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
                 fare.setVisibility(View.VISIBLE);
 
                 //   Toast.makeText(getApplicationContext(),"gugugaga"+ name, Toast.LENGTH_SHORT).show();
@@ -681,19 +712,19 @@ public class MainActivity extends AppCompatActivity
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if (jsonObject.names().get(0).equals("success")) {
-                               // Toast.makeText(getApplicationContext(), jsonObject.getString("success"), Toast.LENGTH_SHORT).show();
+                                // Toast.makeText(getApplicationContext(), jsonObject.getString("success"), Toast.LENGTH_SHORT).show();
                                 parklat = Double.parseDouble(jsonObject.getString("lat"));
                                 parklong = Double.parseDouble(jsonObject.getString("long"));
                                 String fare_detail = jsonObject.getString("bill");
 
-                                fare.setText("Your approximate fee is ₹ "+fare_detail);
+                                fare.setText("Your approximate fee is ₹ " + fare_detail);
 
                                 setLocationMarker(parklat, parklong, 3);
 
 
                                 parkloc = new LatLng(parklat, parklong);
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(parkloc, 13.0f));
-                             //   Toast.makeText(getApplicationContext(), jsonObject.getString("bill"), Toast.LENGTH_SHORT).show();
+                                //   Toast.makeText(getApplicationContext(), jsonObject.getString("bill"), Toast.LENGTH_SHORT).show();
 
                                 String url = getDirectionsUrl(destination, parkloc);
 
@@ -720,7 +751,7 @@ public class MainActivity extends AppCompatActivity
                                 b6.setVisibility(View.VISIBLE);
                                 park_again.setVisibility(View.VISIBLE);
                                 frag.setVisibility(View.INVISIBLE);
-                               // fare.setText(fare_detail);
+                                // fare.setText(fare_detail);
 
                                /* setLocationMarker(22.5145,88.4033,3);
                                 destloc = new LatLng(22.5145,88.4033);
@@ -755,9 +786,9 @@ public class MainActivity extends AppCompatActivity
                         hashMap.put("dest_long", String.valueOf(destination.longitude));
                         hashMap.put("id", session.getuserId());
                         hashMap.put("car_no", car_selected);
-                        hashMap.put("start_time",start_time_park.toString());
-                        hashMap.put("end_time",end_time_park.toString());
-
+                        hashMap.put("start_time", start_time_park.toString());
+                        hashMap.put("end_time", end_time_park.toString());
+                        hashMap.put("price_pref",preference.toString());
 
 
                         //fab.setEnabled(false);
@@ -772,6 +803,15 @@ public class MainActivity extends AppCompatActivity
                 requestQueue.add(request);
 
                 fab.setEnabled(false);
+                    time_message.setVisibility(View.VISIBLE);
+                    spinner.setVisibility(View.INVISIBLE);
+                    luxury.setVisibility(View.INVISIBLE);
+                    economy.setVisibility(View.INVISIBLE);
+            }
+            else
+                {
+                    Toast.makeText(getApplicationContext(),"Please select either luxury or economy", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
