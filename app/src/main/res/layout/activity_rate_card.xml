@@ -26,6 +26,8 @@
    android:padding="20dp"
     android:layout_marginTop="70dp">
     <TableRow
+        android:padding="50dp"/>
+    <TableRow
         android:background="#42948E"
 
         android:padding="40dp">
@@ -45,10 +47,21 @@
     </TableRow>
     <TableRow
         android:padding="10dp"/>
+    <TableRow
+        android:background="#01274A"
+        android:padding="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Economy Rates:"
+            android:textColor="#fff"/>
+
+    </TableRow>
 
     <TableRow
         android:background="#01274A"
-        android:padding="30dp">
+        android:padding="10dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,24 +77,73 @@
             android:textColor="#fff"/>
 
     </TableRow>
-<TableRow
-    android:padding="10dp"/>
-
     <TableRow
         android:background="#01274A"
-        android:padding="30dp"
-        >
+        android:padding="10dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="After 1 Hour"
             android:textColor="#fff"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="₹ 50"
+            android:text=" ₹ 20 "
+            android:textColor="#fff"/>
+
+    </TableRow>
+
+<TableRow
+    android:padding="10dp"/>
+
+    <TableRow
+        android:background="#01274A"
+        android:padding="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Luxury Rates:"
+            android:textColor="#fff"/>
+
+    </TableRow>
+
+    <TableRow
+        android:background="#01274A"
+        android:padding="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Upto 1 Hour"
+            android:textColor="#fff"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=" ₹ 50 "
+            android:textColor="#fff"/>
+
+    </TableRow>
+    <TableRow
+        android:background="#01274A"
+        android:padding="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="After 1 Hour"
+            android:textColor="#fff"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=" ₹ 30 "
             android:textColor="#fff"/>
 
     </TableRow>

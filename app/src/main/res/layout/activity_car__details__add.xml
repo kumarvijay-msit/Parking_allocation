@@ -2,14 +2,14 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_marginTop="30dp"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#4a5166"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/addcars"
 
     >
     <EditText
         android:id="@+id/edit1"
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#fff"/>
@@ -25,10 +25,7 @@
         android:id="@+id/list_item"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:drawSelectorOnTop="false"
-        android:background="@drawable/addcar"
-
-        />
+        android:drawSelectorOnTop="false" />
     <RelativeLayout
         android:id="@+id/loadingPanel"
         android:layout_width="match_parent"
