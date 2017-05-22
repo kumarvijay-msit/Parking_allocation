@@ -60,20 +60,37 @@
         android:id="@+id/loadingPanel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
         <ProgressBar
             style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true"
-            android:theme="@style/CircularProgress" />
+            android:theme="@style/CircularProgress"
+            android:id="@+id/progressBar2" />
+
+
+
+
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="470dp"
         >
+        <TextView
+            android:id="@+id/messagesgeo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:gravity="center"
+            android:text="PLACE"
+            android:textStyle="bold"
+            android:layout_above="@+id/car_spinner"
+            android:layout_toStartOf="@+id/End_time" />
+
 
         <TextView
             android:id="@+id/dest_message"
