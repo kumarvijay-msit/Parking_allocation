@@ -47,6 +47,7 @@
         android:background="@android:color/transparent"
         tools:layout="@layout/content_main" />
 
+
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="30dp"
@@ -64,6 +65,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
 
+
         <ProgressBar
             style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="wrap_content"
@@ -79,7 +81,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="470dp"
+        android:layout_marginTop="450dp"
         >
         <TextView
             android:id="@+id/messagesgeo"
@@ -95,16 +97,21 @@
         <TextView
             android:id="@+id/dest_message"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:textAlignment="center"
             android:padding="5dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
             android:textColor="#D4E3E3"
             android:background="#66000000"
             android:text="Enter destination location in the search box "
             android:textSize="18sp"
             android:fontFamily="sans-serif-medium"/>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:id="@+id/listView_suggest"
+            android:layout_below="@+id/dest_message"/>
 
         <TextView
             android:id="@+id/current_loc_message"

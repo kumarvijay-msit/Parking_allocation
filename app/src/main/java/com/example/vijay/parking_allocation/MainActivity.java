@@ -37,6 +37,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -112,6 +113,7 @@ public class MainActivity extends AppCompatActivity
     private View b_get;
     private TrackGps gps;
     int ids = 0;
+    ListView listView_suggest;
     ArrayList<LatLng> markerPoints;
     static LatLng srclocation;
     static LatLng destination;
@@ -157,6 +159,22 @@ public class MainActivity extends AppCompatActivity
     private int sMinute, eMinute;
 
     TextView messagesgeo;
+
+    private ListView listView;
+    private String names[]={"Vijay","Kumar"};
+    private Integer imageid = R.drawable.ic_history_black_24dp;
+
+    private RequestQueue requestQueueSuggestion;
+    private StringRequest requestSuggestion;
+
+    private static final String URL_Suggestion = "https://shayongupta.000webhostapp.com/user_info/user_add_car.php";
+
+
+
+
+
+
+
     /**
      * This integer will uniquely define the dialog to be used for displaying time picker.
      */
@@ -258,6 +276,23 @@ public class MainActivity extends AppCompatActivity
         economy = (Button)findViewById(R.id.economy_btn);
         luxury.setVisibility(View.GONE);
         economy.setVisibility(View.GONE);
+
+
+
+        CustomList customList = new CustomList(this, names, imageid);
+
+        listView = (ListView) findViewById(R.id.listView_suggest);
+        listView.setAdapter(customList);
+        listView.setVisibility(View.INVISIBLE);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getApplicationContext(),"You Clicked "+names[i],Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
 
 
 
@@ -384,6 +419,7 @@ public class MainActivity extends AppCompatActivity
                 //  Log.i(TAG, "Place: " + place.getName());
                 mMap.clear();
                 dest_message.setVisibility(View.INVISIBLE);
+
 
                 myMarkersrc.setDraggable(false);
                 LatLng destlocation = place.getLatLng();
@@ -1058,7 +1094,9 @@ public class MainActivity extends AppCompatActivity
                 MapStyleOptions.loadRawResourceStyle(
                         this, R.raw.map));
         // mMap.setOnMyLocationButtonClickListener(this);
+        requestQueueSuggestion = Volley.newRequestQueue(this);
         FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.imgMyLocation);
+
         fab1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
@@ -1071,6 +1109,9 @@ public class MainActivity extends AppCompatActivity
                 frag.setVisibility(View.VISIBLE);
                 current_loc_message.setVisibility(View.INVISIBLE);
                 dest_message.setVisibility(View.VISIBLE);
+                listView.setVisibility(View.VISIBLE);
+
+
 
             }
         });
@@ -1115,7 +1156,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onMyLocationButtonClick() {
         gps = new TrackGps(MainActivity.this);
         mMap.clear();
-
+        requestQueueSuggestion = Volley.newRequestQueue(this);
 
         if (gps.canGetLocation()) {
 
@@ -1158,6 +1199,44 @@ public class MainActivity extends AppCompatActivity
             });
             location_enabled = true;
 
+            requestSuggestion = new StringRequest(Request.Method.POST, URL_Suggestion, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        if (jsonObject.names().get(0).equals("success")) {
+                            Toast.makeText(getApplicationContext(), jsonObject.getString("success"), Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            Toast.makeText(getApplicationContext(), jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    HashMap<String, String> hashMap = new HashMap<String, String>();
+                  //  hashMap.put("car_no",editText.getText().toString());
+                    hashMap.put("id", session.getuserId());
+                    //  Toast.makeText(getApplicationContext(), "Successfull", Toast.LENGTH_SHORT).show();
+                    //fab.setEnabled(false);
+
+
+                    return hashMap;
+                }
+            };
+
+            requestQueue.add(request);
 
             // Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
         } else {
