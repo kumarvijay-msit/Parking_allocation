@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity
     private static GoogleMap mMap;
     private View b_get;
     private TrackGps gps;
+    LatLng destinationnew;
     int ids = 0;
     ListView listView_suggest;
     ArrayList<LatLng> markerPoints;
@@ -125,14 +126,19 @@ public class MainActivity extends AppCompatActivity
     FloatingActionButton fab;
     static boolean flag = false, flags = false;
     static boolean location_enabled = false;
-
+    static  double src_lattitude;
+    static double src_longitude;
     ArrayList<String> options = new ArrayList<String>();
     ArrayAdapter<String> adapters;
     PlaceAutocompleteFragment autocompleteFragment;
+    String placename;
+    LatLng destlocation;
 
     StringBuilder start_time_park,end_time_park;
     Geocoder geocoder;
     List<Address> addresses;
+
+    String[] suggestion = new String[2];
 
     double parklat = 0.0;
     double parklong = 0.0;
@@ -161,13 +167,13 @@ public class MainActivity extends AppCompatActivity
     TextView messagesgeo;
 
     private ListView listView;
-    private String names[]={"Vijay","Kumar"};
+   private String names[]={"Vijay","Kumar"};
     private Integer imageid = R.drawable.ic_history_black_24dp;
 
     private RequestQueue requestQueueSuggestion;
     private StringRequest requestSuggestion;
 
-    private static final String URL_Suggestion = "https://shayongupta.000webhostapp.com/user_info/user_add_car.php";
+    private static final String URL_Suggestion = "https://shayongupta.000webhostapp.com/booking/recent_booking.php";
 
 
 
@@ -279,18 +285,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        CustomList customList = new CustomList(this, names, imageid);
 
-        listView = (ListView) findViewById(R.id.listView_suggest);
-        listView.setAdapter(customList);
-        listView.setVisibility(View.INVISIBLE);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(),"You Clicked "+names[i],Toast.LENGTH_SHORT).show();
-            }
-        });
 
 
 
@@ -321,6 +316,7 @@ public class MainActivity extends AppCompatActivity
 
         b6 = findViewById(R.id.cancel_trip);
         b6.setVisibility(View.GONE);
+
 
         proceed = (Button)findViewById(R.id.proceed);
         proceed.setVisibility(View.INVISIBLE);
@@ -418,59 +414,18 @@ public class MainActivity extends AppCompatActivity
                 // TODO: Get info about the selected place.
                 //  Log.i(TAG, "Place: " + place.getName());
                 mMap.clear();
+                placename = place.getName().toString();
                 dest_message.setVisibility(View.INVISIBLE);
 
 
                 myMarkersrc.setDraggable(false);
-                LatLng destlocation = place.getLatLng();
+                 destlocation = place.getLatLng();
+
 
                 if (location_enabled == true) {
 
 
-                        fab.setEnabled(true);
 
-                    setLocationMarker(srclocation.latitude, srclocation.longitude, 1);
-                    destination = destlocation;
-
-                    myMarkersrc.setDraggable(false);
-
-
-                    mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-                        @Override
-                        public void onMarkerDragStart(Marker arg0) {
-                            // TODO Auto-generated method stub
-
-
-                            Log.d("System out", "onMarkerDragStart..." + arg0.getPosition().latitude + "..." + arg0.getPosition().longitude);
-                        }
-
-                        @SuppressWarnings("unchecked")
-                        @Override
-                        public void onMarkerDragEnd(Marker arg0) {
-                            // TODO Auto-generated method stub
-                            Log.d("System out", "onMarkerDragEnd..." + arg0.getPosition().latitude + "..." + arg0.getPosition().longitude);
-                            double dest_lattitude = arg0.getPosition().latitude;
-                            double dest_longitude = arg0.getPosition().longitude;
-                            destination = new LatLng(dest_lattitude, dest_longitude);
-                            mMap.animateCamera(CameraUpdateFactory.newLatLng(arg0.getPosition()));
-                        }
-
-                        @Override
-                        public void onMarkerDrag(Marker arg0) {
-                            // TODO Auto-generated method stub
-                            Log.i("System out", "onMarkerDrag...");
-                        }
-                    });
-
-
-                    setLocationMarker(destination.latitude, destination.longitude, 2);
-                    b1.setVisibility(View.VISIBLE);
-                    b2.setVisibility(View.VISIBLE);
-                    b3.setVisibility(View.VISIBLE);
-                    b4.setVisibility(View.VISIBLE);
-                    b5.setVisibility(View.VISIBLE);
-                    time_message.setVisibility(View.VISIBLE);
-                    proceed.setVisibility(View.VISIBLE);
 
                 } else {
                     Toast.makeText(getApplicationContext(), "Please Navigate to Current Location", Toast.LENGTH_LONG).show();
@@ -580,7 +535,7 @@ public class MainActivity extends AppCompatActivity
         proceed.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                try {
+               /* try {
                     addresses = geocoder.getFromLocation(22.5105,88.4152, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -594,7 +549,7 @@ public class MainActivity extends AppCompatActivity
                 String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
 
                 messagesgeo = (TextView)findViewById(R.id.messagesgeo);
-                messagesgeo.setText(knownName);
+                messagesgeo.setText(knownName);*/
 
 
 
@@ -858,6 +813,7 @@ public class MainActivity extends AppCompatActivity
                         hashMap.put("start_time", start_time_park.toString());
                         hashMap.put("end_time", end_time_park.toString());
                         hashMap.put("price_pref",preference.toString());
+                        hashMap.put("placename",placename);
 
 
                         //fab.setEnabled(false);
@@ -1094,7 +1050,7 @@ public class MainActivity extends AppCompatActivity
                 MapStyleOptions.loadRawResourceStyle(
                         this, R.raw.map));
         // mMap.setOnMyLocationButtonClickListener(this);
-        requestQueueSuggestion = Volley.newRequestQueue(this);
+       // requestQueueSuggestion = Volley.newRequestQueue(this);
         FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.imgMyLocation);
 
         fab1.setOnClickListener(new View.OnClickListener() {
@@ -1165,47 +1121,19 @@ public class MainActivity extends AppCompatActivity
             latitude = gps.getLatitude();
             setLocationMarker(latitude, longitude, 1);
             srclocation = new LatLng(latitude, longitude);
-
-            //final LatLng current = new LatLng(latitude, longitude);
-            //Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
-            //mMap.addMarker(new MarkerOptions().position(current));
-
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(srclocation, 16.0f));
-            mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-                @Override
-                public void onMarkerDragStart(Marker arg0) {
-                    // TODO Auto-generated method stub
-
-
-                    Log.d("System out", "onMarkerDragStart..." + arg0.getPosition().latitude + "..." + arg0.getPosition().longitude);
-                }
-
-                @SuppressWarnings("unchecked")
-                @Override
-                public void onMarkerDragEnd(Marker arg0) {
-                    // TODO Auto-generated method stub
-                    Log.d("System out", "onMarkerDragEnd..." + arg0.getPosition().latitude + "..." + arg0.getPosition().longitude);
-                    double src_lattitude = arg0.getPosition().latitude;
-                    double src_longitude = arg0.getPosition().longitude;
-                    srclocation = new LatLng(src_lattitude, src_longitude);
-                    mMap.animateCamera(CameraUpdateFactory.newLatLng(arg0.getPosition()));
-                }
-
-                @Override
-                public void onMarkerDrag(Marker arg0) {
-                    // TODO Auto-generated method stub
-                    Log.i("System out", "onMarkerDrag...");
-                }
-            });
-            location_enabled = true;
-
             requestSuggestion = new StringRequest(Request.Method.POST, URL_Suggestion, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         if (jsonObject.names().get(0).equals("success")) {
-                            Toast.makeText(getApplicationContext(), jsonObject.getString("success"), Toast.LENGTH_SHORT).show();
+                            int i=0;
+                           Toast.makeText(getApplicationContext(),jsonObject.getString("1") , Toast.LENGTH_SHORT).show();
+                            suggestion[0] = jsonObject.getString(String.valueOf(0));
+                            suggestion[1] = jsonObject.getString(String.valueOf(3));
+                            double dest_latt =
+
+                            Toast.makeText(getApplicationContext(),suggestion[0] , Toast.LENGTH_SHORT).show();
 
                         } else {
                             Toast.makeText(getApplicationContext(), jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
@@ -1226,8 +1154,12 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     HashMap<String, String> hashMap = new HashMap<String, String>();
-                  //  hashMap.put("car_no",editText.getText().toString());
+                    //  hashMap.put("car_no",editText.getText().toString());
                     hashMap.put("id", session.getuserId());
+
+
+                    hashMap.put("user_lat",String.valueOf(srclocation.latitude));
+                    hashMap.put("user_long",String.valueOf(srclocation.longitude));
                     //  Toast.makeText(getApplicationContext(), "Successfull", Toast.LENGTH_SHORT).show();
                     //fab.setEnabled(false);
 
@@ -1236,13 +1168,57 @@ public class MainActivity extends AppCompatActivity
                 }
             };
 
-            requestQueue.add(request);
+            requestQueueSuggestion.add(requestSuggestion);
+
+
+
+
+
+            //final LatLng current = new LatLng(latitude, longitude);
+            //Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
+            //mMap.addMarker(new MarkerOptions().position(current));
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(srclocation, 16.0f));
+
+            mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                @Override
+                public void onMarkerDragStart(Marker arg0) {
+                    // TODO Auto-generated method stub
+
+
+                    Log.d("System out", "onMarkerDragStart..." + arg0.getPosition().latitude + "..." + arg0.getPosition().longitude);
+                }
+
+                @SuppressWarnings("unchecked")
+                @Override
+                public void onMarkerDragEnd(Marker arg0) {
+                    // TODO Auto-generated method stub
+                    Log.d("System out", "onMarkerDragEnd..." + arg0.getPosition().latitude + "..." + arg0.getPosition().longitude);
+                     src_lattitude = arg0.getPosition().latitude;
+                     src_longitude = arg0.getPosition().longitude;
+                    srclocation = new LatLng(src_lattitude, src_longitude);
+                    mMap.animateCamera(CameraUpdateFactory.newLatLng(arg0.getPosition()));
+                }
+
+                @Override
+                public void onMarkerDrag(Marker arg0) {
+                    // TODO Auto-generated method stub
+                    Log.i("System out", "onMarkerDrag...");
+                }
+            });
+            location_enabled = true;
+
+            suggestion();
+
+
 
             // Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
         } else {
 
             gps.showSettingsAlert();
         }
+
+
 
         return false;
     }
@@ -1490,5 +1466,68 @@ public class MainActivity extends AppCompatActivity
             // Drawing polyline in the Google Map for the i-th route
             mMap.addPolyline(lineOptions);
         }
+    }
+
+    public void suggestion(){
+
+        CustomList customList = new CustomList(this, suggestion, imageid);
+        listView = (ListView) findViewById(R.id.listView_suggest);
+
+        listView.setAdapter(customList);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+               method1(destinationnew);
+            }
+        });
+    }
+    public void method1(LatLng dest){
+
+        fab.setEnabled(true);
+
+        setLocationMarker(srclocation.latitude, srclocation.longitude, 1);
+        destination = destlocation;
+
+        myMarkersrc.setDraggable(false);
+
+
+        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker arg0) {
+                // TODO Auto-generated method stub
+
+
+                Log.d("System out", "onMarkerDragStart..." + arg0.getPosition().latitude + "..." + arg0.getPosition().longitude);
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onMarkerDragEnd(Marker arg0) {
+                // TODO Auto-generated method stub
+                Log.d("System out", "onMarkerDragEnd..." + arg0.getPosition().latitude + "..." + arg0.getPosition().longitude);
+                double dest_lattitude = arg0.getPosition().latitude;
+                double dest_longitude = arg0.getPosition().longitude;
+                destination = new LatLng(dest_lattitude, dest_longitude);
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(arg0.getPosition()));
+            }
+
+            @Override
+            public void onMarkerDrag(Marker arg0) {
+                // TODO Auto-generated method stub
+                Log.i("System out", "onMarkerDrag...");
+            }
+        });
+
+
+        setLocationMarker(destination.latitude, destination.longitude, 2);
+        b1.setVisibility(View.VISIBLE);
+        b2.setVisibility(View.VISIBLE);
+        b3.setVisibility(View.VISIBLE);
+        b4.setVisibility(View.VISIBLE);
+        b5.setVisibility(View.VISIBLE);
+        time_message.setVisibility(View.VISIBLE);
+        proceed.setVisibility(View.VISIBLE);
+
     }
 }

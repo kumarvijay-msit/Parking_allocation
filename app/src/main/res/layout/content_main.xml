@@ -109,7 +109,7 @@
             android:fontFamily="sans-serif-medium"/>
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="200dp"
             android:id="@+id/listView_suggest"
             android:layout_below="@+id/dest_message"/>
 
